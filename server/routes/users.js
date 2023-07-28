@@ -31,24 +31,23 @@ router.put("/:id", async (req, res) => {
 // uploading new profile picture
 router.put("/profile/:username", async (req, res) => {
 
-    // const { userId, img } = req.body;
-    console.log(req.body)
-    // const user = await User.findOne({ _id: userId })
+    const { userId, img } = req.body;
+    const user = await User.findOne({ _id: userId })
 
-    // if (user?.username === req.params.username) {
-    try {
-        const updatedUser = await User.findOneAndUpdate(
-            { username: req.params.username },
-            { profilePicture: req.body },
-            { new: true }
-        );
-        await updatedUser.save();
-        console.log(updatedUser);
-        res.status(200).json(updatedUser);
-    } catch (err) {
-        res.status(500).json(err)
+    if (user?.username === req.params.username && user?.isAdmin) {
+        try {
+            const updatedUser = await User.findOneAndUpdate(
+                { username: req.params.username },
+                { profilePicture: img },
+                { new: true }
+            );
+            await updatedUser.save();
+            console.log(updatedUser);
+            res.status(200).json(updatedUser);
+        } catch (err) {
+            res.status(500).json(err)
+        }
     }
-    // }
 });
 
 

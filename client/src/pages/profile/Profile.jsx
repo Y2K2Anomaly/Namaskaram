@@ -19,7 +19,7 @@ export default function Profile() {
     useEffect(() => {
         const submitPicture = async () => {
             const newUser = {
-                userId: user._id,
+                userId: user?._id,
             }
 
             if (file) {
@@ -28,7 +28,6 @@ export default function Profile() {
                 data.append("name", fileName);
                 data.append("file", file);
                 newUser.img = fileName;
-                console.log(newUser);
                 try {
                     await axios.post("/upload", data);
                 } catch (err) {
@@ -37,14 +36,14 @@ export default function Profile() {
             }
 
             try {
-                await axios.put("/users/profile/:username", newUser)
+                await axios.put(`/users/profile/${username}`, newUser)
                 window.location.reload()
             } catch (err) {
                 console.log("Put failed to upload")
             }
         }
         submitPicture();
-    }, [file, user?.id])
+    }, [file])
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -82,18 +81,20 @@ export default function Profile() {
                                     }
                                     alt=""
                                 />
-                                <div className="addImageButton">
-                                    <IconButton>
-                                        <AddAPhoto color="success" sx={{ fontSize: 28 }} />
-                                    </IconButton>
-                                    <input
-                                        name="file"
-                                        type="file"
-                                        id="file"
-                                        accept=".png, .jpeg, .jpg"
-                                        onChange={(e) => setFile(e.target.files[0])}
-                                    />
-                                </div>
+                                {
+                                    user.isAdmin && <div className="addImageButton">
+                                        <IconButton>
+                                            <AddAPhoto color="success" sx={{ fontSize: 28 }} />
+                                        </IconButton>
+                                        <input
+                                            name="file"
+                                            type="file"
+                                            id="file"
+                                            accept=".png, .jpeg, .jpg"
+                                            onChange={(e) => setFile(e.target.files[0])}
+                                        />
+                                    </div>
+                                }
                                 <div className="profileInfo">
                                     <h4 className="profileInfoName">{user.username}</h4>
                                     <span className="profileInfoDesc">{user.desc}</span>
