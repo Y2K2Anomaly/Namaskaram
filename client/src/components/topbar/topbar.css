@@ -1,0 +1,118 @@
+.topbarContainer {
+    height: 5rem;
+    width: 100%;
+    background-color: #1877f2;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.topbarLeft {
+    flex: 3;
+    display: flex;
+}
+
+.logo {
+    font-size: 2.4rem;
+    margin-left: 10px;
+    margin-top: 0.03em;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+}
+
+.topbarCenter {
+    flex: 5;
+}
+
+.searchbar {
+    width: 90%;
+    height: 3rem;
+    background-color: white;
+    border-radius: 3rem;
+    display: flex;
+    align-items: center;
+}
+
+.searchIcon {
+    font-size: 2rem !important;
+    margin-left: 0.5em;
+    margin-right: 0.03em;
+}
+
+.searchInput {
+    border: none;
+    width: 70%;
+    outline: none;
+}
+
+.topbarRight {
+    flex: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    color: white;
+}
+
+.topbarIcons {
+    display: flex;
+}
+
+.topbarIconItem {
+    margin-right: 1.5rem;
+    cursor: pointer;
+    position: relative;
+}
+
+.topbarIconBadge {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: red;
+    border-radius: 50%;
+    color: white;
+    position: absolute;
+    top: -0.1rem;
+    right: -0.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.topbarImg {
+    width: 3.8rem;
+    height: 3.8rem;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.logOutButton a {
+    font-size: 1.6rem;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.5s ease-in;
+}
+
+.logOutButton a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .topbarLeft {
+        display: none;
+    }
+
+    .logoutText {
+        display: none;
+    }
+}
+
+@media (max-width: 975px) {
+    .logoutText {
+        display: none;
+    }
+}

@@ -1,0 +1,8 @@
+.feed {
+    flex: 5.5;
+    font-size: 1.6rem;
+}
+
+.feedWrapper {
+    padding: 1.25em;
+}
