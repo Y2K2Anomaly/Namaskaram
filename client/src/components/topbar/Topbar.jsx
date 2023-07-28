@@ -4,11 +4,19 @@ import { Search, Person, Chat, Notifications, Logout } from '@mui/icons-material
 import { IconButton } from '@mui/material';
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from '../../context/AuthContext';
+import axios from 'axios';
 
 const Topbar = () => {
     const { user } = useContext(AuthContext);
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const navigate = useNavigate();
+
+    const logOut = async () => {
+        await axios.put("auth/logout", user)
+        localStorage.removeItem('user');
+        navigate("/login")
+        window.location.reload();
+    }
 
     return (
         <div className='topbarContainer'>
@@ -51,7 +59,7 @@ const Topbar = () => {
                         <span className="topbarIconBadge">1</span>
                     </div>
                 </div>
-                <div className='logOutButton'>
+                <div className='logOutButton' onClick={logOut}>
                     <Link>
                         <span className='logoutText'>Logout</span>
                         <IconButton>
