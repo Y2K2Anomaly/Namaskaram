@@ -14,6 +14,38 @@ export default function Profile() {
     const [user, setUser] = useState({});
     const { username } = useParams();
 
+    const [file, setFile] = useState(null);
+
+    useEffect(() => {
+        const submitPicture = async () => {
+            const newUser = {
+                userId: user._id,
+            }
+
+            if (file) {
+                const data = new FormData();
+                const fileName = Date.now() + file.name;
+                data.append("name", fileName);
+                data.append("file", file);
+                newUser.img = fileName;
+                console.log(newUser);
+                try {
+                    await axios.post("/upload", data);
+                } catch (err) {
+                    console.log("failed to upload data")
+                }
+            }
+
+            try {
+                await axios.put("/users/profile/:username", "person/10.jpeg")
+                window.location.reload()
+            } catch (err) {
+                console.log("Put failed to upload")
+            }
+        }
+        submitPicture();
+    }, [file])
+
     useEffect(() => {
         const fetchUser = async () => {
             const res = await axios.get(`/users?username=${username}`);
@@ -54,6 +86,13 @@ export default function Profile() {
                                     <IconButton>
                                         <AddAPhoto color="success" sx={{ fontSize: 28 }} />
                                     </IconButton>
+                                    <input
+                                        name="file"
+                                        type="file"
+                                        id="file"
+                                        accept=".png, .jpeg, .jpg"
+                                        onChange={(e) => setFile(e.target.files[0])}
+                                    />
                                 </div>
                                 <div className="profileInfo">
                                     <h4 className="profileInfoName">{user.username}</h4>

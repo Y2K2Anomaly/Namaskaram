@@ -26,9 +26,9 @@ const Share = () => {
             data.append("file", file);
             newPost.img = fileName;
             console.log(newPost);
-            try{
+            try {
                 await axios.post("/upload", data);
-            } catch(err) {
+            } catch (err) {
                 console.log("failed to upload data")
             }
         }
@@ -59,14 +59,14 @@ const Share = () => {
                 <hr className="shareHr" />
 
                 {file && (
-                        <div className="shareImgContainer">
-                            <img className="shareImg" src={URL.createObjectURL(file)} alt="" />
-                            <Cancel className="shareCancelImg" onClick={() => setFile(null)} />
-                        </div>
+                    <div className="shareImgContainer">
+                        <img className="shareImg" src={URL.createObjectURL(file)} alt="" />
+                        <Cancel className="shareCancelImg" onClick={() => setFile(null)} />
+                    </div>
                 )}
-                <form 
-                    className="shareBottom" 
-                    onSubmit={submitHandler} 
+                <form
+                    className="shareBottom"
+                    onSubmit={submitHandler}
                     encType="multipart/form-data"
                 >
                     <div className="shareOptions">
@@ -79,7 +79,7 @@ const Share = () => {
                                 style={{ display: "none" }}
                                 name="file"
                                 type="file"
-                                id="file" 
+                                id="file"
                                 accept=".png, .jpeg, .jpg"
                                 onChange={(e) => setFile(e.target.files[0])} />
                         </label>
