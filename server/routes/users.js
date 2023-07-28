@@ -32,7 +32,7 @@ router.put("/:id", async (req, res) => {
 router.put("/profile/:username", async (req, res) => {
 
     // const { userId, img } = req.body;
-
+    console.log(req.body)
     // const user = await User.findOne({ _id: userId })
 
     // if (user?.username === req.params.username) {

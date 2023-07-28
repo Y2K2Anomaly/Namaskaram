@@ -37,14 +37,14 @@ export default function Profile() {
             }
 
             try {
-                await axios.put("/users/profile/:username", "person/10.jpeg")
+                await axios.put("/users/profile/:username", newUser)
                 window.location.reload()
             } catch (err) {
                 console.log("Put failed to upload")
             }
         }
         submitPicture();
-    }, [file])
+    }, [file, user?.id])
 
     useEffect(() => {
         const fetchUser = async () => {
