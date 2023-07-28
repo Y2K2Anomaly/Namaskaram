@@ -1,6 +1,7 @@
-const io = require("socket.io")("https://namaskaram-socketio.vercel.app", {
+const io = require("socket.io")(8000, {
     cors: {
-        origin: "https://namaskaram-client.vercel.app",
+        origin: "http://localhost:3000",
+        // origin: "https://namaskaram-client.vercel.app",
     },
 });
 

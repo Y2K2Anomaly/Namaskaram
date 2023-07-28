@@ -11,7 +11,8 @@ import ru from "javascript-time-ago/locale/ru.json";
 TimeAgo.addDefaultLocale(en)
 TimeAgo.addLocale(ru)
 
-axios.defaults.baseURL = 'https://namaskaram-api.vercel.app/api';
+axios.defaults.baseURL = 'http://localhost:8080/api';
+// axios.defaults.baseURL = 'https://namaskaram-api.vercel.app/api';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
