@@ -9,6 +9,7 @@ import { useParams } from "react-router";
 import { AddAPhoto } from '@mui/icons-material';
 import { IconButton } from "@mui/material";
 
+
 export default function Profile() {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const [user, setUser] = useState({});
@@ -43,6 +44,7 @@ export default function Profile() {
             }
         }
         submitPicture();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [file])
 
     useEffect(() => {
