@@ -35,8 +35,18 @@
 
 .addImageButton {
     position: absolute;
-    top: 50%;
-    left: 72%;
+    top: 46%;
+    left: 75%;
+    cursor: pointer;
+}
+
+.addImageButton input {
+    position: absolute;
+    top: 25%;
+    left: -210%;
+    opacity: 0;
+    z-index: 999;
+    cursor: pointer;
 }
 
 .profileInfo {
