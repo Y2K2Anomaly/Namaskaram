@@ -30,6 +30,7 @@ export default function Login() {
         </div>
         <div className="loginRight">
           <form className="loginBox" onSubmit={handleClick}>
+            <h1>Already Registered?</h1>
             <input
               placeholder="Email"
               type="email"

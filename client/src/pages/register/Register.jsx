@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import "./register.css";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { IconButton } from "@mui/material";
+import { AddAPhoto } from "@mui/icons-material";
 
 const Register = () => {
 
@@ -10,6 +12,8 @@ const Register = () => {
     const password = useRef();
     const passwordAgain = useRef();
     const navigate = useNavigate();
+
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
     const handleClick = async (e) => {
         e.preventDefault();
@@ -39,6 +43,22 @@ const Register = () => {
                 </div>
                 <div className="registerRight">
                     <form className="registerBox" onSubmit={handleClick}>
+                        <h1>Register Account</h1>
+                        <div className='userImage'>
+                            <img src={PF + "person/noAvatar.png"} alt="" />
+                            <div className="addImageButton">
+                                <IconButton>
+                                    <AddAPhoto color="primary" sx={{ fontSize: 28 }} />
+                                </IconButton>
+                                <input
+                                    name="file"
+                                    type="file"
+                                    id="file"
+                                    accept=".png, .jpeg, .jpg"
+                                // onChange={(e) => setFile(e.target.files[0])}
+                                />
+                            </div>
+                        </div>
                         <input
                             type="text"
                             className="registerInput"
