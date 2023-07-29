@@ -62,6 +62,11 @@
     font-weight: 500;
     cursor: pointer;
     outline: none;
+    transition: all 0.3s ease-out;
+}
+
+.loginButton:hover {
+    background-color: #286ac2;
 }
 
 .loginButton:disabled {
@@ -70,7 +75,7 @@
 
 .loginForgot {
     text-align: center;
-    color: #1775ee;
+    color: #116de7;
 }
 
 .loginRegisterButton {
@@ -84,6 +89,11 @@
     font-size: 20px;
     font-weight: 500;
     cursor: pointer;
+    transition: all 0.3s ease-out;
+}
+
+.loginRegisterButton:hover {
+    background-color: rgb(1, 159, 1);
 }
 
 @media (max-width: 665px) {

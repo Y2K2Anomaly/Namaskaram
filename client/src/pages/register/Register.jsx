@@ -157,7 +157,7 @@ const Register = () => {
                             Sign Up
                         </button>
                         <button
-                            className="registerRegisterButton"
+                            className="registerLoginButton"
                             onClick={() => navigate('/login')}
                         >
                             Log into Account
