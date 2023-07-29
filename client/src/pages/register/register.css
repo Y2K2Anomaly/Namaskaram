@@ -10,7 +10,7 @@
 
 .registerWrapper {
     width: 78%;
-    height: 78%;
+    height: 80%;
     display: flex;
 }
 
@@ -107,4 +107,22 @@
     font-size: 20px;
     font-weight: 500;
     cursor: pointer;
+}
+
+@media (max-width: 665px) {
+
+    .registerWrapper {
+        flex-direction: column;
+        text-align: center;
+        width: 80%;
+        height: 80%;
+    }
+
+    .registerDesc {
+        display: none;
+    }
+
+    .registerBox {
+        height: 500px;
+    }
 }

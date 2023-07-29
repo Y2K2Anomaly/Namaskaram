@@ -85,3 +85,15 @@
     font-weight: 500;
     cursor: pointer;
 }
+
+@media (max-width: 665px) {
+    .loginWrapper {
+        flex-direction: column;
+        text-align: center;
+        justify-content: space-between;
+    }
+
+    .loginLeft {
+        margin-bottom: 20px;
+    }
+}
