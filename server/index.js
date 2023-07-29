@@ -20,7 +20,7 @@ app.use(morgan("common"));
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 app.use(cors({
-    origin: "http://localhost:3000"
+    origin: "https://namaskaram-client.vercel.app"
 }));
 
 // routes import
