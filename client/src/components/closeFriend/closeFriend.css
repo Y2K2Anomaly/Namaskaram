@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 0.9375em;
-    padding: 0.625em;
+    padding: 0.625em 0;
     cursor: pointer;
 }
 

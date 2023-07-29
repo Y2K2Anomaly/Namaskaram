@@ -1,5 +1,6 @@
 .sidebar {
     flex: 3;
+    max-width: 25%;
     height: calc(100vh - 5rem);
     overflow-y: scroll;
     position: sticky;
@@ -20,7 +21,7 @@
 }
 
 .sidebarWrapper {
-    padding: 2rem;
+    padding: 1rem;
 }
 
 .sidebarList {

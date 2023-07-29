@@ -33,7 +33,7 @@ const Rightbar = () => {
         const getFriends = async () => {
             try {
                 const friendList = await axios.get("/users/friends/" + user?._id)
-                setFriends(friendList.data)
+                setFriends(friendList?.data)
             } catch (err) {
                 console.log(err)
             }
@@ -42,7 +42,6 @@ const Rightbar = () => {
         getFriends()
 
     }, [user])
-
 
     const handleClick = async () => {
         try {
@@ -61,30 +60,7 @@ const Rightbar = () => {
         setFollowed(!followed)
     };
 
-    const HomeRightbar = () => (
-        <>
-            <div className="birthdayContainer">
-                <img className='birthdayImg' src={`${PF}gift.png`} alt="gift.icon" />
-                <span className="birthdayText">
-                    <b>Pola Foster</b> and <b>3 other friends</b> have a birthday today.
-                </span>
-            </div>
-            <img className='rightbarAd' src={`${PF}ad.png`} alt="add.img" />
-            <h4 className='rightbarTitle'>Online Friends</h4>
-            <ul className="rightbarFriendList">
-                {
-                    Users.map(user => {
-                        return <Online
-                            key={user.id}
-                            user={user}
-                        />
-                    })
-                }
-            </ul>
-        </>
-    );
-
-    const ProfileRightbar = () => (
+    const Rightbar = () => (
         <>
             {user.username !== currentUser.username && (
                 <button
@@ -136,13 +112,24 @@ const Rightbar = () => {
                     ))
                 }
             </div>
+            <h4 className='rightbarTitle'>Online Friends</h4>
+            <ul className="rightbarFriendList">
+                {
+                    Users.map(user => {
+                        return <Online
+                            key={user.id}
+                            user={user}
+                        />
+                    })
+                }
+            </ul>
         </>
     );
 
     return (
         <div className='rightbar'>
             <div className="rightbarWrapper">
-                {user ? <ProfileRightbar /> : <HomeRightbar />}
+                <Rightbar />
             </div>
         </div>
     )
