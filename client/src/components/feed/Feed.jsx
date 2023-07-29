@@ -3,42 +3,36 @@ import "./feed.css";
 import Share from '../share/Share';
 import Post from '../post/Post';
 import axios from "axios";
-import { AuthContext } from "../../context/AuthContext";
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 const Feed = () => {
 
     const [posts, setPosts] = useState([]);
     const { user } = useContext(AuthContext);
-    const [currentUser, setCurrentUser] = useState(null);
     const { username } = useParams();
+
+    const location = useLocation();
+    const currentUrl = location.pathname;
 
     useEffect(() => {
         const fetchPosts = async () => {
-            const res = username
+            const res = user.username !== username
                 ? await axios.get("/posts/profile/" + username)
-                : await axios.get("posts/timeline/" + user._id)
+                : currentUrl === `/${username}/timeline` ? await axios.get("posts/timeline/" + user._id) : await axios.get("/posts/profile/" + username)
 
             setPosts(res?.data?.sort((p1, p2) => {
                 return new Date(p2.createdAt) - new Date(p1.createdAt);
             }))
         }
         fetchPosts()
-    }, [username, user]);
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            const res = await axios.get(`/users?username=${username}`);
-            setCurrentUser(res.data);
-        };
-        fetchUser();
-    }, [username]);
+    }, [username, user, currentUrl]);
 
     return (
         <div className='feed'>
             <div className="feedWrapper">
                 {
-                    (!username || username === user.username) && <Share currentUser={currentUser} />
+                    (!username || username === user.username) && <Share />
                 }
                 {
                     posts?.map((post) => {

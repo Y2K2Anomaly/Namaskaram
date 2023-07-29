@@ -2,6 +2,17 @@ const User = require("../models/User");
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
 
+
+// get all users 
+router.get('/all', async (req, res) => {
+    try {
+        const users = await User.find().select("-password");
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: 'Error while retrieving users', error });
+    }
+});
+
 // update user
 router.put("/:id", async (req, res) => {
     if (req.body.userId === req.params.id || req.body.isAdmin) {
@@ -31,14 +42,13 @@ router.put("/:id", async (req, res) => {
 // uploading new profile picture
 router.put("/profile/:username", async (req, res) => {
 
-    const { userId, img } = req.body;
-    const user = await User.findOne({ _id: userId })
+    const user = await User.findOne({ _id: req.body.userId })
 
     if (user?.username === req.params.username && user?.isAdmin) {
         try {
             const updatedUser = await User.findOneAndUpdate(
                 { username: req.params.username },
-                { profilePicture: img },
+                req.body.userImg ? { profilePicture: req.body.userImg } : { coverPicture: req.body.coverImg },
                 { new: true }
             );
             await updatedUser.save();

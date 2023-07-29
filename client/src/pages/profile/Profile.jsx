@@ -15,7 +15,8 @@ export default function Profile() {
     const [user, setUser] = useState({});
     const { username } = useParams();
 
-    const [file, setFile] = useState(null);
+    const [file1, setFile1] = useState(null);
+    const [file2, setFile2] = useState(null);
 
     useEffect(() => {
         const submitPicture = async () => {
@@ -23,12 +24,24 @@ export default function Profile() {
                 userId: user?._id,
             }
 
-            if (file) {
+            if (file1) {
                 const data = new FormData();
-                const fileName = Date.now() + file.name;
-                data.append("name", fileName);
-                data.append("file", file);
-                newUser.img = fileName;
+                const file1Name = Date.now() + file1.name;
+                data.append("name", file1Name);
+                data.append("file", file1);
+                newUser.userImg = file1Name;
+                try {
+                    await axios.post("/upload", data);
+                } catch (err) {
+                    console.log("failed to upload data")
+                }
+            }
+            if (file2) {
+                const data = new FormData();
+                const file2Name = Date.now() + file2.name;
+                data.append("name", file2Name);
+                data.append("file", file2);
+                newUser.coverImg = file2Name;
                 try {
                     await axios.post("/upload", data);
                 } catch (err) {
@@ -46,7 +59,7 @@ export default function Profile() {
 
         submitPicture();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [file])
+    }, [file1, file2])
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -74,6 +87,21 @@ export default function Profile() {
                                 }
                                 alt=""
                             />
+                            {
+                                user.isAdmin && <div className="addCoverButton">
+                                    <IconButton>
+                                        <AddAPhoto sx={{ fontSize: 35, color: "gray" }} />
+                                    </IconButton>
+                                    <input
+                                        name="file2"
+                                        type="file"
+                                        id="file2"
+                                        accept=".png, .jpeg, .jpg"
+                                        onChange={(e) => setFile2(e.target.files[0])}
+                                        className="coverButtonInput"
+                                    />
+                                </div>
+                            }
                             <div className="profileUserImg">
                                 <img
 
@@ -90,11 +118,12 @@ export default function Profile() {
                                             <AddAPhoto color="success" sx={{ fontSize: 28 }} />
                                         </IconButton>
                                         <input
-                                            name="file"
+                                            name="file1"
                                             type="file"
-                                            id="file"
+                                            id="file1"
                                             accept=".png, .jpeg, .jpg"
-                                            onChange={(e) => setFile(e.target.files[0])}
+                                            onChange={(e) => setFile1(e.target.files[0])}
+                                            className="userButtonInput"
                                         />
                                     </div>
                                 }
@@ -109,7 +138,7 @@ export default function Profile() {
                     </div>
 
                     <div className="profileRightBottom">
-                        <Feed username={username} currentUser={user} />
+                        <Feed username={username} />
                         <Rightbar user={user} />
                     </div>
                 </div>

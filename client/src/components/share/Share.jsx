@@ -4,7 +4,7 @@ import { PermMedia, Cancel, Label, Room, EmojiEmotions } from "@mui/icons-materi
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 
-const Share = ({ currentUser }) => {
+const Share = () => {
 
     const { user } = useContext(AuthContext);
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -46,7 +46,7 @@ const Share = ({ currentUser }) => {
             <div className="shareWrapper">
                 <div className="shareTop">
                     <img className='shareProfileImg' src={
-                        currentUser?.profilePicture ? PF + currentUser?.profilePicture : PF + 'person/noAvatar.png'
+                        user?.profilePicture ? PF + user?.profilePicture : PF + 'person/noAvatar.png'
                     } alt="" />
                     <input
                         type="text"
