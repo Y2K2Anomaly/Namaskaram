@@ -4,11 +4,14 @@ import Share from '../share/Share';
 import Post from '../post/Post';
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
+import { useParams } from 'react-router-dom';
 
-const Feed = ({ username }) => {
+const Feed = () => {
 
     const [posts, setPosts] = useState([]);
     const { user } = useContext(AuthContext);
+    const [currentUser, setCurrentUser] = useState(null);
+    const { username } = useParams();
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -23,11 +26,19 @@ const Feed = ({ username }) => {
         fetchPosts()
     }, [username, user]);
 
+    useEffect(() => {
+        const fetchUser = async () => {
+            const res = await axios.get(`/users?username=${username}`);
+            setCurrentUser(res.data);
+        };
+        fetchUser();
+    }, [username]);
+
     return (
         <div className='feed'>
             <div className="feedWrapper">
                 {
-                    (!username || username === user.username) && <Share />
+                    (!username || username === user.username) && <Share currentUser={currentUser} />
                 }
                 {
                     posts?.map((post) => {

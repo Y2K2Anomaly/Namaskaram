@@ -1,15 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './topbar.css';
 import { Search, Person, Chat, Notifications, Logout } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 
 const Topbar = () => {
     const { user } = useContext(AuthContext);
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+    const [currentUser, setCurrentUser] = useState(null);
     const navigate = useNavigate();
+    const { username } = useParams();
 
     const logOut = async () => {
         await axios.put("auth/logout", user)
@@ -18,10 +20,18 @@ const Topbar = () => {
         window.location.reload();
     }
 
+    useEffect(() => {
+        const fetchUser = async () => {
+            const res = await axios.get(`/users?username=${username}`);
+            setCurrentUser(res.data);
+        };
+        fetchUser();
+    }, [username]);
+
     return (
         <div className='topbarContainer'>
             <div className="topbarLeft">
-                <Link to="/" style={{ textDecoration: "none" }}>
+                <Link to={"/" + user.username} style={{ textDecoration: "none" }}>
                     <span className="logo">Namaskaram</span>
                 </Link>
             </div>
@@ -71,7 +81,7 @@ const Topbar = () => {
                     <IconButton>
                         <img
                             src={
-                                user.profilePicture ? PF + user.profilePicture : PF + "person/noAvatar.png"
+                                currentUser?.profilePicture ? PF + currentUser?.profilePicture : PF + "person/noAvatar.png"
                             }
                             alt="img"
                             className='topbarImg'
