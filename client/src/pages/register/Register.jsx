@@ -1,7 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import "./register.css";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { IconButton } from "@mui/material";
+import { AddAPhoto } from "@mui/icons-material";
 
 const Register = () => {
 
@@ -9,7 +11,37 @@ const Register = () => {
     const email = useRef();
     const password = useRef();
     const passwordAgain = useRef();
+    const city = useRef();
+    const from = useRef();
+    const bio = useRef();
+    const relationship = useRef();
     const navigate = useNavigate();
+
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+
+    const [file, setFile] = useState(null);
+    const [profilePicture, setProfilePicture] = useState('');
+
+    useEffect(() => {
+        const submitPicture = async () => {
+
+            if (file) {
+                const data = new FormData();
+                const fileName = Date.now() + file.name;
+                data.append("name", fileName);
+                data.append("file", file);
+                try {
+                    await axios.post("/upload", data);
+                } catch (err) {
+                    console.log("failed to upload data")
+                }
+                setProfilePicture(fileName);
+            }
+        }
+
+        submitPicture();
+    }, [file])
+    console.log(profilePicture)
 
     const handleClick = async (e) => {
         e.preventDefault();
@@ -18,8 +50,13 @@ const Register = () => {
         } else {
             const user = {
                 username: username.current.value,
+                desc: bio.current.value,
+                city: city.current.value,
+                from: from.current.value,
+                relationship: relationship.current.value,
                 email: email.current.value,
                 password: password.current.value,
+                profilePicture: profilePicture
             }
             try {
                 await axios.post("/auth/register", user)
@@ -39,11 +76,55 @@ const Register = () => {
                 </div>
                 <div className="registerRight">
                     <form className="registerBox" onSubmit={handleClick}>
+                        <h1>Register Account</h1>
+                        <div className='userImage'>
+                            <img src={profilePicture ? PF + profilePicture : PF + "person/noAvatar.png"} alt="" />
+                            <div className="addImageButton">
+                                <IconButton>
+                                    <AddAPhoto color="primary" sx={{ fontSize: 28 }} />
+                                </IconButton>
+                                <input
+                                    name="file"
+                                    type="file"
+                                    id="file"
+                                    accept=".png, .jpeg, .jpg"
+                                    onChange={(e) => setFile(e.target.files[0])}
+                                />
+                            </div>
+                        </div>
                         <input
                             type="text"
                             className="registerInput"
                             placeholder="Username"
                             ref={username}
+                            required
+                        />
+                        <input
+                            type="text"
+                            className="registerInput"
+                            placeholder="Bio"
+                            ref={bio}
+                            required
+                        />
+                        <input
+                            type="text"
+                            className="registerInput"
+                            placeholder="City"
+                            ref={city}
+                            required
+                        />
+                        <input
+                            type="text"
+                            className="registerInput"
+                            placeholder="From"
+                            ref={from}
+                            required
+                        />
+                        <input
+                            type="text"
+                            className="registerInput"
+                            placeholder="Relationship"
+                            ref={relationship}
                             required
                         />
                         <input

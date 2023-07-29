@@ -43,6 +43,7 @@ export default function Profile() {
                 console.log("Put failed to upload")
             }
         }
+
         submitPicture();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [file])
@@ -57,7 +58,7 @@ export default function Profile() {
 
     return (
         <>
-            <Topbar />
+            <Topbar currentUser={user} />
             <div className="profile">
                 <Sidebar />
                 <div className="profileRight">
@@ -108,7 +109,7 @@ export default function Profile() {
                     </div>
 
                     <div className="profileRightBottom">
-                        <Feed username={username} />
+                        <Feed username={username} currentUser={user} />
                         <Rightbar user={user} />
                     </div>
                 </div>

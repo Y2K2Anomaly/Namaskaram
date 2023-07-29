@@ -1,15 +1,16 @@
 .register {
     width: 100vw;
-    height: 100vh;
+    padding: 25px;
     background-color: #f0f2f2;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.6rem;
 }
 
 .registerWrapper {
-    width: 70%;
-    height: 70%;
+    width: 80%;
+    height: 100%;
     display: flex;
 }
 
@@ -33,25 +34,56 @@
 }
 
 .registerBox {
-    height: 400px;
     padding: 20px;
-    background-color: white;
+    background-color: #fff;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
+.userImage {
+    margin: 0 auto;
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.userImage img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.addImageButton {
+    position: absolute;
+    top: 90%;
+    left: 80%;
+}
+
+.addImageButton input {
+    position: absolute;
+    top: 25%;
+    left: -210%;
+    opacity: 0;
+    z-index: 999;
+    cursor: pointer;
+}
+
 .registerInput {
     height: 50px;
+    border: none;
     border-radius: 10px;
-    border: 1px solid gray;
+    border-bottom: 1px solid gray;
     font-size: 18px;
     padding-left: 20px;
+    margin-bottom: 10px;
     outline: none;
 }
 
 .registerButton {
+    margin-bottom: 10px;
     height: 50px;
     border-radius: 10px;
     border: none;
@@ -62,12 +94,8 @@
     cursor: pointer;
 }
 
-.registerForgot {
-    text-align: center;
-    color: #1775ee;
-}
-
 .registerRegisterButton {
+    margin-bottom: 10px;
     width: 60%;
     align-self: center;
     height: 50px;
@@ -78,4 +106,17 @@
     font-size: 20px;
     font-weight: 500;
     cursor: pointer;
+}
+
+@media (max-width: 765px) {
+
+    .registerWrapper {
+        flex-direction: column;
+        text-align: center;
+        width: 70%;
+    }
+
+    .registerDesc {
+        display: none;
+    }
 }

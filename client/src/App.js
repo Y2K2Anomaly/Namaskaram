@@ -23,10 +23,16 @@ function App() {
       <Router>
         <Routes>
 
-          <Route path="/" element={user ? <Home /> : <Register />} />
-          <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-          <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
+          <Route path={user ? "/:username" : "/"} element={user ? <Home /> : <Register />} />
+
+          <Route path="/login" element={
+            user ? <Navigate to={"/" + user?.username} /> : <Login />
+          } />
+
+          <Route path="/register" element={user ? <Navigate to={"/" + user?.username} /> : <Register />} />
+
           <Route path="/messenger" element={!user ? <Navigate to="/" /> : <Messenger />} />
+
           <Route path="/profile/:username" element={<Profile />} />
 
         </Routes>
