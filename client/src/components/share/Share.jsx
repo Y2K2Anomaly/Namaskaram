@@ -4,7 +4,7 @@ import { PermMedia, Cancel, Label, Room, EmojiEmotions } from "@mui/icons-materi
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 
-const Share = () => {
+const Share = ({ onPostShare }) => {
 
     const { user } = useContext(AuthContext);
     const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -16,7 +16,8 @@ const Share = () => {
         e.preventDefault();
         const newPost = {
             userId: user._id,
-            desc: desc.current.value
+            desc: desc.current.value,
+            createdAt: new Date()
         }
 
         if (file) {
@@ -35,7 +36,8 @@ const Share = () => {
 
         try {
             await axios.post("/posts", newPost)
-            window.location.reload()
+            setFile(null);
+            onPostShare(newPost)
         } catch (err) {
             console.log("Post failed to upload")
         }

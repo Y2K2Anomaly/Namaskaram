@@ -6,3 +6,8 @@
 .feedWrapper {
     padding: 1.25em;
 }
+
+.noPostHeading {
+    padding: 2px 0;
+    margin: 10px 0;
+}

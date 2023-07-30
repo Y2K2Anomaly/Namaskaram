@@ -23,6 +23,7 @@ const Topbar = () => {
             <div className="topbarLeft">
                 <Link to={"/" + user.username + "/timeline"} style={{ textDecoration: "none" }}>
                     <span className="logo">Namaskaram</span>
+                    <img src='/assets/namaste_icon.png' alt='#logo' className='namasteIcon' />
                 </Link>
             </div>
             <div className="topbarCenter">
