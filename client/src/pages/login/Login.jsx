@@ -23,7 +23,13 @@ export default function Login() {
     <div className="login">
       <div className="loginWrapper">
         <div className="loginLeft">
-          <h3 className="loginLogo">Namaskaram</h3>
+          <div className="namaskaramTitle">
+            <h3 className="loginLogo">
+              Namaskaram
+            </h3>
+            <img src='/assets/namaste_icon.png' alt='#logo' className='loginNamasteIcon' />
+          </div>
+
           <span className="loginDesc">
             Connect with friends and the world around you on Lamasocial.
           </span>

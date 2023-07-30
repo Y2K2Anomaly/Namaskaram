@@ -12,15 +12,26 @@
 .topbarLeft {
     flex: 3;
     display: flex;
+    height: 50px;
+    align-items: flex-end;
+    position: relative;
 }
 
 .logo {
-    font-size: 2.4rem;
+    font-size: 3.3rem;
     margin-left: 10px;
-    margin-top: 0.03em;
+    margin-right: 5px;
     font-weight: bold;
     color: #fff;
     cursor: pointer;
+}
+
+.namasteIcon {
+    position: absolute;
+    top: 5%;
+    display: inline-block;
+    width: 45px;
+    height: 45px;
 }
 
 .topbarCenter {
@@ -102,17 +113,27 @@
 }
 
 @media (max-width: 600px) {
-    .topbarLeft {
+
+    .logoutText {
         display: none;
     }
 
-    .logoutText {
+    .topbarCenter {
         display: none;
     }
 }
 
 @media (max-width: 975px) {
-    .logoutText {
+    .topbarLeft {
+        flex: 3;
+        align-items: center;
+    }
+
+    .namasteIcon {
         display: none;
+    }
+
+    .logo {
+        font-size: 2.8rem;
     }
 }

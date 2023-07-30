@@ -71,7 +71,12 @@ const Register = () => {
         <div className="register">
             <div className="registerWrapper">
                 <div className="registerLeft">
-                    <h3 className='registerLogo'>Namaskaram</h3>
+                    <div className="namaskaramTitle">
+                        <h3 className="loginLogo">
+                            Namaskaram
+                        </h3>
+                        <img src='/assets/namaste_icon.png' alt='#logo' className='loginNamasteIcon' />
+                    </div>
                     <span className='registerDesc'>Connect with friends and the world around you on Namaskaram.</span>
                 </div>
                 <div className="registerRight">
@@ -157,7 +162,7 @@ const Register = () => {
                             Sign Up
                         </button>
                         <button
-                            className="registerRegisterButton"
+                            className="registerLoginButton"
                             onClick={() => navigate('/login')}
                         >
                             Log into Account

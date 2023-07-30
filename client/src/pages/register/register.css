@@ -14,6 +14,20 @@
     display: flex;
 }
 
+.loginNamasteIcon {
+    display: inline-block;
+    width: 90px;
+    height: 80px;
+    margin-bottom: 20px;
+}
+
+.namaskaramTitle {
+    display: flex;
+    max-width: 400px;
+    max-height: 100px;
+    align-items: flex-end;
+}
+
 .registerLeft,
 .registerRight {
     flex: 1;
@@ -92,9 +106,14 @@
     font-size: 20px;
     font-weight: 500;
     cursor: pointer;
+    transition: all 0.3s ease-out;
 }
 
-.registerRegisterButton {
+.registerButton:hover {
+    background-color: #286ac2;
+}
+
+.registerLoginButton {
     margin-bottom: 10px;
     width: 60%;
     align-self: center;
@@ -106,14 +125,24 @@
     font-size: 20px;
     font-weight: 500;
     cursor: pointer;
+    transition: all 0.3s ease-out;
+}
+
+.registerLoginButton:hover {
+    background-color: rgb(1, 159, 1);
 }
 
 @media (max-width: 765px) {
 
     .registerWrapper {
         flex-direction: column;
-        text-align: center;
+        text-align: left;
         width: 70%;
+    }
+
+    .namaskaramTitle {
+        max-width: 600px;
+        justify-content: center;
     }
 
     .registerDesc {
