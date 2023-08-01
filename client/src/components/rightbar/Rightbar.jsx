@@ -7,10 +7,16 @@ import { AuthContext } from '../../context/AuthContext';
 import { Add, Remove } from "@mui/icons-material";
 import { io } from 'socket.io-client';
 
-const Rightbar = () => {
+const Rightbar = React.memo(() => {
 
     const [user, setUser] = useState({});
+    const [userFriends, setUserFriends] = useState([]);
+    const [userOnlineFriends, setUserOnlineFriends] = useState([]);
     const { username } = useParams();
+    const { user: currentUser, dispatch } = useContext(AuthContext);
+    const [currentUserFriends, setCurrentUserFriends] = useState([]);
+    const [currentUserOnlineFriends, setCurrentUserOnlineFriends] = useState([]);
+    const [followed, setFollowed] = useState(currentUser.followings.includes(user?._id));
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -20,29 +26,34 @@ const Rightbar = () => {
         fetchUser();
     }, [username]);
 
-    const [friends, setFriends] = useState([]);
-    const { user: currentUser, dispatch } = useContext(AuthContext);
-    const [followed, setFollowed] = useState(currentUser.followings.includes(user?._id));
 
     useEffect(() => {
         setFollowed(currentUser?.followings.includes(user?._id))
-    }, [currentUser?.followings, user?._id])
+    }, [currentUser?.followings, user?._id]);
 
     useEffect(() => {
         const getFriends = async () => {
             if (user?._id) {
                 try {
-                    const friendList = await axios.get("/users/friends/" + user._id);
-                    setFriends(friendList?.data);
+                    const friendList = await axios.get("/users/friends/" + user?._id);
+                    setUserFriends(friendList?.data);
                 } catch (err) {
                     console.log(err);
                 }
             }
+        };
+
+        getFriends()
+    }, [user])
+
+    useEffect(() => {
+        const getFriends = async () => {
+            const res = await axios.get("/users/friends/" + currentUser._id)
+            setCurrentUserFriends(res?.data)
         }
 
         getFriends()
-
-    }, [user])
+    }, [currentUser._id])
 
     const handleClick = async () => {
         try {
@@ -63,28 +74,35 @@ const Rightbar = () => {
 
 
     // Fetching Online Friends
-    const [onlineFriends, setOnlineFriends] = useState([]);
-
     useEffect(() => {
-        const socket = io("http://localhost:8000");
+        const fetchOnlineFriends = async () => {
+            const socket = io("http://localhost:8000");
 
-        // Emit 'addUser' event to let the server know about the current user
-        socket.emit("addUser", currentUser._id);
+            // Emitting 'addUser' event to let the server know about the current user
+            socket.emit("addUser", currentUser._id);
+            socket.emit("addUser", user._id);
 
-        // Listening for 'getUsers' event to get the online users array
-        socket.on("getUsers", (users) => {
-            const onlineFriendIds = users.map(user => user.userId);
-            const onlineFriends = friends.filter(friend => onlineFriendIds.includes(friend._id));
-            setOnlineFriends(onlineFriends);
-        });
+            // Listening for 'getUsers' event to get the online users array 
+            socket.on("getUsers", (users) => {
+                const onlineFriendIds = users.map(user => user.userId);
+                const onlineFriends = currentUserFriends.filter(friend => onlineFriendIds.includes(friend._id));
+                setCurrentUserOnlineFriends(onlineFriends)
+            });
+            socket.on("getUsers", (users) => {
+                const onlineFriendIds = users.map(user => user.userId);
+                const onlineFriends = userFriends.filter(friend => onlineFriendIds.includes(friend._id));
+                setUserOnlineFriends(onlineFriends)
+            });
 
-        // Cleaning up the socket connection when the component unmounts
-        return () => {
-            socket.disconnect();
+            // Cleaning up the socket connection when the component unmounts
+            return () => {
+                socket.disconnect();
+            };
         };
-        // eslint-disable-next-line
-    }, [currentUser._id]);
 
+        fetchOnlineFriends();
+
+    }, [user?._id, currentUser._id, currentUserFriends, userFriends]);
 
     const dateString = user?.dateOfBirth;
     const date = new Date(dateString);
@@ -93,8 +111,7 @@ const Rightbar = () => {
     const month = date.toLocaleString('default', { month: 'long' });
     const day = date.getDate();
 
-    const DOBformattedDate = `${day} ${month} ${year}`;
-
+    const DOBformatted = `${day} ${month} ${year}`;
 
     return (
         <div className='rightbar'>
@@ -112,6 +129,10 @@ const Rightbar = () => {
                 <h4 className='rightbarTitle'>User Information</h4>
                 <div className="rightbarInfo">
                     <div className="rightbarInfoItem">
+                        <span className="rightbarInfoKey">Name: </span>
+                        <span className="rightbarInfoValue">{user.name}</span>
+                    </div>
+                    <div className="rightbarInfoItem">
                         <span className="rightbarInfoKey">City: </span>
                         <span className="rightbarInfoValue">{user.city}</span>
                     </div>
@@ -121,7 +142,7 @@ const Rightbar = () => {
                     </div>
                     <div className="rightbarInfoItem">
                         <span className="rightbarInfoKey">Date Of Birth: </span>
-                        <span className="rightbarInfoValue">{DOBformattedDate}</span>
+                        <span className="rightbarInfoValue">{DOBformatted ? DOBformatted : ""}</span>
                     </div>
                     <div className="rightbarInfoItem">
                         <span className="rightbarInfoKey">Relationship: </span>
@@ -131,7 +152,7 @@ const Rightbar = () => {
                 <h4 className='rightbarTitle'>User friends</h4>
                 <div className="rightbarFollowings">
                     {
-                        friends.map((friend, index) => (
+                        userFriends.map((friend, index) => (
                             <Link
                                 to={`/profile/${friend.username}`}
                                 style={{ textDecoration: "none" }}
@@ -142,7 +163,7 @@ const Rightbar = () => {
                                     key={index}>
                                     <img
                                         src={friend?.profilePicture?.url || "/assets/noAvatar.png"}
-                                        alt=""
+                                        alt="_img"
                                         className="rightbarFollowingImg"
                                     />
                                     <span
@@ -154,18 +175,27 @@ const Rightbar = () => {
                     }
                 </div>
 
-                <h4 className='rightbarTitle'>Online Friends: {onlineFriends && <span>{onlineFriends.length}</span>}</h4>
-                {onlineFriends &&
-                    <ul className="rightbarFriendList">
-                        {onlineFriends.map(friend => (
-                            <Online key={friend._id} friend={friend} />
-                        ))}
-                    </ul>
-
+                {currentUser.username === user.username ? (
+                    <div>
+                        <h4 className='rightbarTitle'>Online Friends: {currentUserOnlineFriends && <span>{currentUserOnlineFriends.length}</span>}</h4>
+                        <ul className="rightbarFriendList">
+                            {currentUserOnlineFriends.map(friend => (
+                                <Online key={friend._id} friend={friend} />
+                            ))}
+                        </ul>
+                    </div>) : (
+                    <div>
+                        <h4 className='rightbarTitle'>Online Friends: {userOnlineFriends && <span>{userOnlineFriends.length}</span>}</h4>
+                        <ul className="rightbarFriendList">
+                            {userOnlineFriends.map(friend => (
+                                <Online key={friend._id} friend={friend} />
+                            ))}
+                        </ul>
+                    </div>)
                 }
             </div>
         </div>
-    )
-}
+    );
+})
 
 export default Rightbar;
