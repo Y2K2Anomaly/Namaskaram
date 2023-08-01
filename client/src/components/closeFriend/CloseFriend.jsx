@@ -3,7 +3,6 @@ import './closeFriend.css';
 import { useNavigate } from 'react-router';
 
 const CloseFriend = ({ user }) => {
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const navigate = useNavigate();
 
     return (
@@ -11,10 +10,10 @@ const CloseFriend = ({ user }) => {
             <li className="sidebarFriend" onClick={() => navigate(`/profile/${user.username}`)}>
                 <img
                     className="sidebarFriendImg"
-                    src={user.profilePicture ? PF + user.profilePicture : PF + "person/noAvatar.png"}
+                    src={user?.profilePicture?.url || "/assets/noAvatar.png"}
                     alt=""
                 />
-                <span className="sidebarFriendName">{user.username}</span>
+                <span className="sidebarFriendName">{user.name}</span>
             </li>
         </>
     )

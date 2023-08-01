@@ -3,9 +3,16 @@ const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema(
     {
+        name: {
+            type: String,
+            required: true,
+            min: 3,
+            max: 20,
+            unique: true
+        },
         username: {
             type: String,
-            require: true,
+            required: true,
             min: 3,
             max: 20,
             unique: true
@@ -22,12 +29,24 @@ const UserSchema = new mongoose.Schema(
             min: 6
         },
         profilePicture: {
-            type: String,
-            default: ""
+            url: {
+                type: String,
+                default: ""
+            },
+            public_id: {
+                type: String,
+                default: ""
+            }
         },
         coverPicture: {
-            type: String,
-            default: ""
+            url: {
+                type: String,
+                default: ""
+            },
+            public_id: {
+                type: String,
+                default: ""
+            }
         },
         followers: {
             type: Array,
@@ -36,10 +55,6 @@ const UserSchema = new mongoose.Schema(
         followings: {
             type: Array,
             default: []
-        },
-        isAdmin: {
-            type: Boolean,
-            default: false
         },
         desc: {
             type: String,
@@ -52,6 +67,10 @@ const UserSchema = new mongoose.Schema(
         from: {
             type: String,
             max: 50
+        },
+        dateOfBirth: {
+            type: Date,
+            required: true
         },
         relationship: {
             type: Number,

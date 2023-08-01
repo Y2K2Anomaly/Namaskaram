@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import "./share.css";
 import { PermMedia, Cancel, Label, Room, EmojiEmotions } from "@mui/icons-material";
 import { AuthContext } from '../../context/AuthContext';
@@ -6,55 +6,72 @@ import axios from 'axios';
 
 const Share = ({ onPostShare }) => {
 
-    const { user } = useContext(AuthContext);
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-    const desc = useRef();
+    const { user: currentUser } = useContext(AuthContext);
+    const [sameUser, setSameUser] = useState('');
+    const [desc, setDesc] = useState('');
 
     const [file, setFile] = useState(null);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const res = await axios.get(`/users?username=${currentUser?.username}`);
+            setSameUser(res.data)
+        };
+        fetchUser();
+    }, [currentUser?.username]);
 
     const submitHandler = async (e) => {
         e.preventDefault();
         const newPost = {
-            userId: user._id,
-            desc: desc.current.value,
-            createdAt: new Date()
-        }
+            userId: currentUser._id,
+            desc: desc
+        };
 
         if (file) {
             const data = new FormData();
-            const fileName = Date.now() + file.name;
-            data.append("name", fileName);
             data.append("file", file);
-            newPost.img = fileName;
-            console.log(newPost);
+
             try {
-                await axios.post("/upload", data);
+                // Uploading the image to Cloudinary
+                const res = await axios.post("/upload", data, {
+                    headers: { "Content-Type": "multipart/form-data" }
+                });
+                newPost.img = {
+                    url: res.data.imageUrl,
+                    public_id: res.data.publicId
+                };
+
             } catch (err) {
-                console.log("failed to upload data")
+                console.log("Failed to upload data", err);
+                return;
             }
         }
 
         try {
-            await axios.post("/posts", newPost)
+            // Creating a new post with the Cloudinary image URL and public_id
+            const createdPost = await axios.post("/posts", newPost);
             setFile(null);
-            onPostShare(newPost)
+            setDesc('');
+            onPostShare(createdPost.data); // Passing the created post data to the parent component
         } catch (err) {
-            console.log("Post failed to upload")
+            console.log("Post failed to upload", err);
         }
-    }
+    };
+
 
     return (
         <div className='share'>
             <div className="shareWrapper">
                 <div className="shareTop">
                     <img className='shareProfileImg' src={
-                        user?.profilePicture ? PF + user?.profilePicture : PF + 'person/noAvatar.png'
+                        sameUser?.profilePicture?.url || currentUser?.profilePicture?.url || '/assets/noAvatar.png'
                     } alt="" />
                     <input
                         type="text"
                         className="shareInput"
-                        placeholder={`What's in your mind ${user.username} ?`}
-                        ref={desc}
+                        placeholder={`What's in your mind ${currentUser.name} ?`}
+                        value={desc}
+                        onChange={(e) => setDesc(e.target.value)}
                     />
                 </div>
 

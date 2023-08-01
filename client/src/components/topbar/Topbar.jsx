@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './topbar.css';
 import { Search, Person, Chat, Notifications, Logout } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
@@ -7,21 +7,28 @@ import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 
 const Topbar = () => {
-    const { user } = useContext(AuthContext);
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+    const { user: currentUser } = useContext(AuthContext);
+    const [sameUser, setSameUser] = useState({});
     const navigate = useNavigate();
 
     const logOut = async () => {
-        await axios.put("auth/logout", user)
         localStorage.removeItem('user');
         navigate("/login")
         window.location.reload();
     }
 
+    useEffect(() => {
+        const fetchUser = async () => {
+            const res = await axios.get(`/users?username=${currentUser?.username}`);
+            setSameUser(res.data)
+        };
+        fetchUser();
+    }, [currentUser?.username]);
+
     return (
         <div className='topbarContainer'>
             <div className="topbarLeft">
-                <Link to={"/" + user.username + "/timeline"} style={{ textDecoration: "none" }}>
+                <Link to={"/" + currentUser.username + "/timeline"} style={{ textDecoration: "none" }}>
                     <span className="logo">Namaskaram</span>
                     <img src='/assets/namaste_icon.png' alt='#logo' className='namasteIcon' />
                 </Link>
@@ -68,11 +75,10 @@ const Topbar = () => {
                         </IconButton>
                     </Link>
                 </div>
-                <Link to={`/profile/${user.username}`}>
+                <Link to={`/profile/${currentUser?.username}`}>
                     <IconButton>
                         <img
-                            src={
-                                user?.profilePicture ? PF + user?.profilePicture : PF + "person/noAvatar.png"
+                            src={sameUser.profilePicture?.url || currentUser?.profilePicture?.url || "/assets/noAvatar.png"
                             }
                             alt="img"
                             className='topbarImg'

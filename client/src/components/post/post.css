@@ -26,6 +26,11 @@
     position: relative;
 }
 
+.editInput {
+    outline: none;
+    border: none;
+}
+
 .optionsButtonContainer {
     width: 100px;
     height: 80px;

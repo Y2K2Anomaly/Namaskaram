@@ -11,15 +11,12 @@ const Feed = () => {
     const [newPosts, setNewPosts] = useState([]);
     const { user } = useContext(AuthContext);
     const { username } = useParams();
-
     const location = useLocation();
     const currentUrl = location.pathname;
 
     useEffect(() => {
         const fetchPosts = async () => {
-            const res = user.username !== username
-                ? await axios.get("/posts/profile/" + username)
-                : currentUrl === `/${username}/timeline` ? await axios.get("posts/timeline/" + user._id) : await axios.get("/posts/profile/" + username);
+            const res = (user.username === username && currentUrl === `/${user.username}/timeline`) ? await axios.get("posts/timeline/" + user._id) : await axios.get("/posts/profile/" + username);
 
             setPosts(res?.data?.sort((p1, p2) => {
                 return new Date(p2.createdAt) - new Date(p1.createdAt);
@@ -38,15 +35,26 @@ const Feed = () => {
         setNewPosts(prevPosts => [newPost, ...prevPosts]);
     }
 
+    // Function to Edit Post desc
+    const handleEdit = (postId, updatedPost) => {
+        setPosts(prevPosts =>
+            prevPosts.map(post => (post._id === postId ? updatedPost : post))
+        );
+        console.log(updatedPost)
+    };
+
+
     return (
         <>
             <div className='feed'>
                 <div className="feedWrapper">
-                    {(!username || username === user.username) && <Share onPostShare={handlePostShare} />}
+
+                    {(username === user.username) && <Share onPostShare={handlePostShare} />}
                     {posts.length === 0 && <h1 className='noPostHeading'>No Posts yet</h1>}
+
                     {posts.map((post) => (
                         // Pass handlePostDelete function as a prop to Post component
-                        <Post key={post._id} post={post} onDelete={handlePostDelete} />
+                        <Post key={post._id} post={post} onDelete={handlePostDelete} onEdit={handleEdit} />
                     ))}
                 </div>
             </div>

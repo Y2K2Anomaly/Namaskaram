@@ -12,10 +12,12 @@ router.post("/register", async (req, res) => {
 
         // create new user
         const newUser = await new User({
+            name: req.body.name,
             username: req.body.username,
             desc: req.body.desc,
             city: req.body.city,
             from: req.body.from,
+            dateOfBirth: req.body.dateOfBirth,
             relationship: req.body.relationship,
             profilePicture: req.body.profilePicture,
             email: req.body.email,
@@ -59,24 +61,6 @@ router.put("/login", async (req, res) => {
 
         await user.save();
         res.status(200).send("Login Successfully!")
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
-
-// LOGOUT 
-router.put("/logout", async (req, res) => {
-
-    try {
-        const user = await User.findOneAndUpdate(
-            { email: req.body.email },
-            { isAdmin: false },
-            { new: true }
-        )
-        !user && res.status(404).json("user not found!")
-
-        await user.save();
-        res.status(200).send("Logout Successfully!")
     } catch (err) {
         res.status(500).json(err)
     }
