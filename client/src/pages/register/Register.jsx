@@ -7,17 +7,17 @@ import { AddAPhoto } from "@mui/icons-material";
 
 const Register = () => {
 
-    const username = useRef();
+    const name = useRef('');
+    const [username, setUsername] = useState('');
     const email = useRef();
     const password = useRef();
     const passwordAgain = useRef();
     const city = useRef();
     const from = useRef();
+    const dateOfBirth = useRef();
     const bio = useRef();
     const relationship = useRef();
     const navigate = useNavigate();
-
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
     const [file, setFile] = useState(null);
     const [profilePicture, setProfilePicture] = useState('');
@@ -27,21 +27,29 @@ const Register = () => {
 
             if (file) {
                 const data = new FormData();
-                const fileName = Date.now() + file.name;
-                data.append("name", fileName);
                 data.append("file", file);
+
                 try {
-                    await axios.post("/upload", data);
+                    const res = await axios.post("/upload", data);
+                    setProfilePicture(res.data)
                 } catch (err) {
                     console.log("failed to upload data")
                 }
-                setProfilePicture(fileName);
             }
         }
 
         submitPicture();
     }, [file])
-    console.log(profilePicture)
+
+    const [isValid, setIsValid] = useState(true)
+
+    const handleUsernameChange = (e) => {
+        const value = e.target.value;
+        const regexPattern = /^@[a-z0-9]+(_[a-z0-9]+)*$/;
+        setIsValid(regexPattern.test(value) && !/\s/.test(value));
+
+        setUsername(value);
+    };
 
     const handleClick = async (e) => {
         e.preventDefault();
@@ -49,14 +57,19 @@ const Register = () => {
             password.current.setCustomValidity("Password don't match")
         } else {
             const user = {
-                username: username.current.value,
+                name: name.current.value,
+                username: username,
                 desc: bio.current.value,
                 city: city.current.value,
                 from: from.current.value,
                 relationship: relationship.current.value,
                 email: email.current.value,
+                dateOfBirth: dateOfBirth.current.value,
                 password: password.current.value,
-                profilePicture: profilePicture
+                profilePicture: {
+                    url: profilePicture.imageUrl,
+                    public_id: profilePicture.publicId
+                }
             }
             try {
                 await axios.post("/auth/register", user)
@@ -83,7 +96,7 @@ const Register = () => {
                     <form className="registerBox" onSubmit={handleClick}>
                         <h1>Register Account</h1>
                         <div className='userImage'>
-                            <img src={profilePicture ? PF + profilePicture : PF + "person/noAvatar.png"} alt="" />
+                            <img src={profilePicture ? profilePicture.imageUrl : "assets/noAvatar.png"} alt="" />
                             <div className="addImageButton">
                                 <IconButton>
                                     <AddAPhoto color="primary" sx={{ fontSize: 28 }} />
@@ -100,10 +113,23 @@ const Register = () => {
                         <input
                             type="text"
                             className="registerInput"
-                            placeholder="Username"
-                            ref={username}
+                            placeholder="Name"
+                            ref={name}
                             required
                         />
+                        <input
+                            type="text"
+                            className="registerInput"
+                            placeholder="@username"
+                            value={username}
+                            onChange={handleUsernameChange}
+                            required
+                        />
+                        {!isValid && (
+                            <div style={{ color: 'red' }}>
+                                Username must contain only small letters, numbers, or the special characters like ' @ ', ' _ ' and should starts with ' @ '. It does not start with ' _ ' or have ' _ ' after the ' @ '. (no spaces allowed)
+                            </div>
+                        )}
                         <input
                             type="text"
                             className="registerInput"
@@ -123,6 +149,13 @@ const Register = () => {
                             className="registerInput"
                             placeholder="From"
                             ref={from}
+                            required
+                        />
+                        <input
+                            type="date"
+                            className="registerInput"
+                            placeholder="Date of Birth"
+                            ref={dateOfBirth}
                             required
                         />
                         <input
@@ -171,7 +204,7 @@ const Register = () => {
                 </div>
 
             </div>
-        </div>
+        </div >
     )
 }
 

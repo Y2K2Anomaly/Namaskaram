@@ -12,15 +12,18 @@ import { AuthContext } from '../../context/AuthContext';
 const Sidebar = () => {
     const { user: currentUser } = useContext(AuthContext);
     const navigate = useNavigate();
-    const [allUsers, setAllUsers] = useState([]);
+    const [suggestionList, setSuggestionList] = useState([]);
 
     useEffect(() => {
         const fetchUsers = async () => {
             const res = await axios.get("/users/all");
-            setAllUsers(res.data);
+            const allUsers = res.data;
+            const filteredUsers = allUsers.filter(user => user._id !== currentUser._id && !currentUser.followings.includes(user._id));
+            setSuggestionList(filteredUsers);
         }
         fetchUsers();
-    }, [])
+
+    }, [currentUser?.followings, currentUser?._id])
 
     return (
         <div className='sidebar'>
@@ -39,7 +42,7 @@ const Sidebar = () => {
                 <ul className="sidebarFriendList">
                     <h3 className="sidebarFriendSuggestionList">Friend Suggestions</h3>
                     {
-                        allUsers.map((user) => {
+                        suggestionList.map((user) => {
                             return <CloseFriend
                                 key={user._id}
                                 user={user}

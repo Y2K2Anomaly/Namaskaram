@@ -3,63 +3,21 @@ import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Feed from "../../components/feed/Feed";
 import Rightbar from "../../components/rightbar/Rightbar";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
 import { AddAPhoto } from '@mui/icons-material';
 import { IconButton } from "@mui/material";
+import { AuthContext } from "../../context/AuthContext";
 
 
 export default function Profile() {
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const [user, setUser] = useState({});
+    const { user: currentUser } = useContext(AuthContext);
     const { username } = useParams();
 
     const [file1, setFile1] = useState(null);
     const [file2, setFile2] = useState(null);
-
-    useEffect(() => {
-        const submitPicture = async () => {
-            const newUser = {
-                userId: user?._id,
-            }
-
-            if (file1) {
-                const data = new FormData();
-                const file1Name = Date.now() + file1.name;
-                data.append("name", file1Name);
-                data.append("file", file1);
-                newUser.userImg = file1Name;
-                try {
-                    await axios.post("/upload", data);
-                } catch (err) {
-                    console.log("failed to upload data")
-                }
-            }
-            if (file2) {
-                const data = new FormData();
-                const file2Name = Date.now() + file2.name;
-                data.append("name", file2Name);
-                data.append("file", file2);
-                newUser.coverImg = file2Name;
-                try {
-                    await axios.post("/upload", data);
-                } catch (err) {
-                    console.log("failed to upload data")
-                }
-            }
-
-            try {
-                await axios.put(`/users/profile/${username}`, newUser)
-                window.location.reload()
-            } catch (err) {
-                console.log("Put failed to upload")
-            }
-        }
-
-        submitPicture();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [file1, file2])
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -68,6 +26,99 @@ export default function Profile() {
         };
         fetchUser();
     }, [username]);
+
+    const submitPicture = async () => {
+        const newUser = {
+            userId: user?._id,
+            profilePicture: {
+                url: '',
+                public_id: ''
+            },
+            coverPicture: {
+                url: '',
+                public_id: ''
+            }
+        }
+
+        if (file1) {
+            const data = new FormData();
+            data.append("file", file1);
+
+            try {
+                const res = await axios.post("/upload", data);
+                newUser.profilePicture.url = res.data.imageUrl;
+                newUser.profilePicture.public_id = res.data.publicId;
+                setFile1(null);
+            } catch (err) {
+                console.log("failed to upload data")
+            }
+        }
+        if (file2) {
+            const data = new FormData();
+            data.append("file", file2);
+
+            try {
+                const res = await axios.post("/upload", data);
+                newUser.coverPicture.url = res.data.imageUrl;
+                newUser.coverPicture.public_id = res.data.publicId;
+                setFile2(null);
+            } catch (err) {
+                console.log("failed to upload data")
+            }
+        }
+
+        try {
+            await axios.put(`/users/profile/${currentUser.username}`, newUser)
+            window.location.reload()
+        } catch (err) {
+            console.log("Put failed to upload")
+        }
+    }
+
+    const handlePictureUpload = () => {
+        if (file1 || file2) {
+            submitPicture();
+        }
+    };
+
+    const onDeleteClick = async ({ pictureType }) => {
+        try {
+            if (pictureType === 'profilePicture') {
+                console.log(user)
+                await axios.put(`/user/picture/${currentUser.username}`, user);
+                console.log('Profile picture deleted successfully');
+            } else if (pictureType === 'coverPicture') {
+                await axios.put(`/cover/picture/${currentUser.username}`, user);
+                console.log('Cover picture deleted successfully');
+            }
+
+            // Update the local user state after deletion
+            setUser((prevUser) => ({
+                ...prevUser,
+                [pictureType]: {
+                    url: '',
+                    public_id: '',
+                },
+            }));
+
+            // Optional: You can also reload the page to update the UI after deletion
+            // window.location.reload();
+        } catch (err) {
+            console.warn(err);
+        }
+    };
+
+
+    // optionsButton
+    const [userBtnOpen, setUserBtnOpen] = useState(false);
+    const [coverBtnOpen, setCoverBtnOpen] = useState(false);
+
+    const userHandleClick = () => {
+        setUserBtnOpen(!userBtnOpen);
+    };
+    const coverHandleClick = () => {
+        setCoverBtnOpen(!coverBtnOpen);
+    };
 
     return (
         <>
@@ -80,18 +131,25 @@ export default function Profile() {
                         <div className="profileCover">
                             <img
                                 className="profileCoverImg"
-                                src={
-                                    user.coverPicture
-                                        ? PF + user.coverPicture
-                                        : PF + "person/noCover.png"
-                                }
-                                alt=""
+                                src={file2 ? URL.createObjectURL(file2) : (user?.coverPicture?.url || "/assets/noCover.png")}
+                                alt="_img"
                             />
                             {
-                                user.isAdmin && <div className="addCoverButton">
+                                currentUser.username === username && <div className="addCoverButton" onClick={coverHandleClick}>
                                     <IconButton>
                                         <AddAPhoto sx={{ fontSize: 35, color: "gray" }} />
                                     </IconButton>
+                                    {
+                                        coverBtnOpen && (
+                                            <div>
+                                                <ul className="optionsButtonContainer">
+                                                    <li onClick={handlePictureUpload}>{!file2 ? "Upload" : "Save"}</li>
+                                                    <hr />
+                                                    <li onClick={() => onDeleteClick({ pictureType: 'coverPicture' })}>Remove</li>
+                                                </ul>
+                                            </div>
+                                        )
+                                    }
                                     <input
                                         name="file2"
                                         type="file"
@@ -100,35 +158,45 @@ export default function Profile() {
                                         onChange={(e) => setFile2(e.target.files[0])}
                                         className="coverButtonInput"
                                     />
+
                                 </div>
                             }
                             <div className="profileUserImg">
                                 <img
 
-                                    src={
-                                        user.profilePicture
-                                            ? PF + user.profilePicture
-                                            : PF + "person/noAvatar.png"
-                                    }
-                                    alt=""
+                                    src={file1 ? URL.createObjectURL(file1) : (user?.profilePicture?.url || "/assets/noAvatar.png")}
+                                    alt="_img"
                                 />
                                 {
-                                    user.isAdmin && <div className="addImageButton">
+                                    currentUser.username === username && <div className="addImageButton" onClick={userHandleClick}>
                                         <IconButton>
                                             <AddAPhoto color="success" sx={{ fontSize: 28 }} />
                                         </IconButton>
+                                        {
+                                            userBtnOpen && (
+                                                <div>
+                                                    <ul className="optionsButtonContainer">
+                                                        <li onClick={handlePictureUpload}>{!file1 ? "Upload" : "Save"}
+                                                        </li>
+                                                        <hr />
+                                                        <li onClick={() => onDeleteClick({ pictureType: 'profilePicture' })}>Remove</li>
+                                                    </ul>
+                                                </div>
+                                            )
+                                        }
                                         <input
                                             name="file1"
                                             type="file"
                                             id="file1"
                                             accept=".png, .jpeg, .jpg"
                                             onChange={(e) => setFile1(e.target.files[0])}
-                                            className="userButtonInput"
+                                            className="coverButtonInput"
                                         />
+
                                     </div>
                                 }
                                 <div className="profileInfo">
-                                    <h4 className="profileInfoName">{user.username}</h4>
+                                    <h4 className="profileInfoName">{user.name}</h4>
                                     <span className="profileInfoDesc">{user.desc}</span>
                                 </div>
                             </div>

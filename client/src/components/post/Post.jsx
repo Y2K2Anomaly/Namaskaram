@@ -1,18 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import './post.css';
 import { MoreVert, FavoriteBorder, Favorite, ChatBubbleOutline } from "@mui/icons-material";
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import { AuthContext } from '../../context/AuthContext';
 import { IconButton } from '@mui/material';
 
-const Post = ({ post, onDelete }) => {
+const Post = ({ post, onDelete, onEdit }) => {
     const [likeCount, setLikeCount] = useState(post.likes?.length ?? 0); // Handle undefined likes array
     const [like, setLike] = useState(false);
     const [user, setUser] = useState({});
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const { user: currentUser } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setLike(post.likes?.includes(currentUser._id) ?? false); // Handle undefined likes array
@@ -52,10 +52,13 @@ const Post = ({ post, onDelete }) => {
 
     const onDeleteClick = async () => {
         try {
-            await axios.delete("/posts/" + post._id, {
+            await axios.delete(`/upload/${post.img.public_id}`);
+
+            await axios.delete(`/posts/${post._id}`, {
                 data: { userId: currentUser._id },
             });
             console.log("deleted successfully");
+
             // Calling the onDelete function received from the Feed component to update posts state
             onDelete(post._id);
         } catch (err) {
@@ -63,29 +66,55 @@ const Post = ({ post, onDelete }) => {
         }
     };
 
+    const [editMode, setEditMode] = useState(false);
+    // const [editedDesc, setEditedDesc] = useState(post.desc);
+    const editedDesc = useRef(null);
+
+    const onEditClick = () => {
+        setEditMode(true);
+    };
+
+    useEffect(() => {
+        if (editMode) {
+            editedDesc.current.focus();
+        }
+    }, [editMode]);
+
+
+    const onSaveEdit = async () => {
+        try {
+            const res = await axios.put(`/posts/${post._id}`, {
+                desc: editedDesc.current.value, userId: currentUser._id
+            });
+            const updatedPost = res.data;
+            onEdit(post._id, updatedPost)
+            setEditMode(false);
+        } catch (err) {
+            console.log("Failed to save edit", err);
+        }
+    };
+
+
     return (
         <div className='post'>
             <div className="postWrapper">
                 <div className="postTop">
                     <div className="postTopLeft">
-                        <Link to={`profile/${user.username}`}>
-                            <img
-                                className='postProfileImg'
-                                src={
-                                    user.profilePicture
-                                        ? PF + user.profilePicture
-                                        : PF + "person/noAvatar.png"
-                                }
-                                alt="_img"
-                            />
-                        </Link>
-                        <span className="postUsername">{user.username}</span>
+                        <img
+                            className='postProfileImg'
+                            src={
+                                user?.profilePicture?.url || "/assets/noAvatar.png"
+                            }
+                            alt="_img"
+                            onClick={() => navigate(`/profile/${user.username}`)}
+                        />
+                        <span className="postUsername">{user.name}</span>
                         <span className="postDate">
                             <ReactTimeAgo date={Date.parse(post.createdAt)} locale='en-US' />
                         </span>
                     </div>
-                    {
-                        currentUser.username === user.username && <div className="postTopRight">
+                    {currentUser.username === user.username && (
+                        <div className="postTopRight">
                             <div className="optionsButton" onClick={handleClick}>
                                 <IconButton>
                                     <MoreVert />
@@ -94,16 +123,25 @@ const Post = ({ post, onDelete }) => {
                                     <ul className='optionsButtonContainer'>
                                         <li onClick={onDeleteClick}>delete</li>
                                         <hr />
-                                        <li>edit</li>
+                                        <li onClick={!editMode ? onEditClick : onSaveEdit}>{!editMode ? 'edit' : 'save'}</li>
                                     </ul>
                                 )}
                             </div>
                         </div>
-                    }
+                    )}
                 </div>
                 <div className="postCenter">
-                    <span className="postText">{post?.desc}</span>
-                    <img className='postImg' src={PF + post.img} alt="" />
+                    {editMode ? (
+                        <input
+                            type="text"
+                            ref={editedDesc}
+                            className='editInput'
+                            placeholder='caption'
+                        />
+                    ) : (
+                        <span className="postText">{post?.desc}</span>
+                    )}
+                    <img className='postImg' src={post.img.url} alt="" />
                 </div>
                 <div className="postBottom">
                     <div className="postBottomLeft">

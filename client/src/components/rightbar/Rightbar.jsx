@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 import "./rightbar.css";
-import { Users } from "../../dummyData";
 import Online from "../online/Online";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { AuthContext } from '../../context/AuthContext';
 import { Add, Remove } from "@mui/icons-material";
+import { io } from 'socket.io-client';
 
 const Rightbar = () => {
 
@@ -20,7 +20,6 @@ const Rightbar = () => {
         fetchUser();
     }, [username]);
 
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
     const [friends, setFriends] = useState([]);
     const { user: currentUser, dispatch } = useContext(AuthContext);
     const [followed, setFollowed] = useState(currentUser.followings.includes(user?._id));
@@ -31,11 +30,13 @@ const Rightbar = () => {
 
     useEffect(() => {
         const getFriends = async () => {
-            try {
-                const friendList = await axios.get("/users/friends/" + user?._id)
-                setFriends(friendList?.data)
-            } catch (err) {
-                console.log(err)
+            if (user?._id) {
+                try {
+                    const friendList = await axios.get("/users/friends/" + user._id);
+                    setFriends(friendList?.data);
+                } catch (err) {
+                    console.log(err);
+                }
             }
         }
 
@@ -60,76 +61,108 @@ const Rightbar = () => {
         setFollowed(!followed)
     };
 
-    const Rightbar = () => (
-        <>
-            {user.username !== currentUser.username && (
-                <button
-                    className="rightbarFollowButton"
-                    onClick={handleClick}
-                >
-                    {followed ? "Unfollow" : "Follow"}
-                    {followed ? <Remove /> : <Add />}
-                </button>
-            )}
 
-            <h4 className='rightbarTitle'>User Information</h4>
-            <div className="rightbarInfo">
-                <div className="rightbarInfoItem">
-                    <span className="rightbarInfoKey">City: </span>
-                    <span className="rightbarInfoValue">{user.city}</span>
-                </div>
-                <div className="rightbarInfoItem">
-                    <span className="rightbarInfoKey">From: </span>
-                    <span className="rightbarInfoValue">{user.from}</span>
-                </div>
-                <div className="rightbarInfoItem">
-                    <span className="rightbarInfoKey">Relationship: </span>
-                    <span className="rightbarInfoValue">{user.relationship === 1 ? "Single" : user.relationship === 2 ? "Married" : "-"}</span>
-                </div>
-            </div>
-            <h4 className='rightbarTitle'>User friends</h4>
-            <div className="rightbarFollowings">
-                {
-                    friends.map((friend, index) => (
-                        <Link
-                            to={`/profile/${friend.username}`}
-                            style={{ textDecoration: "none" }}
-                            key={index}
-                        >
-                            <div
-                                className="rightbarFollowing"
-                                key={index}>
-                                <img
-                                    src={friend.profilePicture ? PF + friend.profilePicture : PF + "person/noAvatar.png"}
-                                    alt=""
-                                    className="rightbarFollowingImg"
-                                />
-                                <span
-                                    className='rightbarFollowingName'
-                                >{friend.username}</span>
-                            </div>
-                        </Link>
-                    ))
-                }
-            </div>
-            <h4 className='rightbarTitle'>Online Friends</h4>
-            <ul className="rightbarFriendList">
-                {
-                    Users.map(user => {
-                        return <Online
-                            key={user.id}
-                            user={user}
-                        />
-                    })
-                }
-            </ul>
-        </>
-    );
+    // Fetching Online Friends
+    const [onlineFriends, setOnlineFriends] = useState([]);
+
+    useEffect(() => {
+        const socket = io("http://localhost:8000");
+
+        // Emit 'addUser' event to let the server know about the current user
+        socket.emit("addUser", currentUser._id);
+
+        // Listening for 'getUsers' event to get the online users array
+        socket.on("getUsers", (users) => {
+            const onlineFriendIds = users.map(user => user.userId);
+            const onlineFriends = friends.filter(friend => onlineFriendIds.includes(friend._id));
+            setOnlineFriends(onlineFriends);
+        });
+
+        // Cleaning up the socket connection when the component unmounts
+        return () => {
+            socket.disconnect();
+        };
+        // eslint-disable-next-line
+    }, [currentUser._id]);
+
+
+    const dateString = user?.dateOfBirth;
+    const date = new Date(dateString);
+
+    const year = date.getFullYear();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const day = date.getDate();
+
+    const DOBformattedDate = `${day} ${month} ${year}`;
+
 
     return (
         <div className='rightbar'>
             <div className="rightbarWrapper">
-                <Rightbar />
+                {user.username !== currentUser.username && (
+                    <button
+                        className="rightbarFollowButton"
+                        onClick={handleClick}
+                    >
+                        {followed ? "Unfollow" : "Follow"}
+                        {followed ? <Remove /> : <Add />}
+                    </button>
+                )}
+
+                <h4 className='rightbarTitle'>User Information</h4>
+                <div className="rightbarInfo">
+                    <div className="rightbarInfoItem">
+                        <span className="rightbarInfoKey">City: </span>
+                        <span className="rightbarInfoValue">{user.city}</span>
+                    </div>
+                    <div className="rightbarInfoItem">
+                        <span className="rightbarInfoKey">From: </span>
+                        <span className="rightbarInfoValue">{user.from}</span>
+                    </div>
+                    <div className="rightbarInfoItem">
+                        <span className="rightbarInfoKey">Date Of Birth: </span>
+                        <span className="rightbarInfoValue">{DOBformattedDate}</span>
+                    </div>
+                    <div className="rightbarInfoItem">
+                        <span className="rightbarInfoKey">Relationship: </span>
+                        <span className="rightbarInfoValue">{user.relationship === 1 ? "Single" : user.relationship === 2 ? "Married" : "-"}</span>
+                    </div>
+                </div>
+                <h4 className='rightbarTitle'>User friends</h4>
+                <div className="rightbarFollowings">
+                    {
+                        friends.map((friend, index) => (
+                            <Link
+                                to={`/profile/${friend.username}`}
+                                style={{ textDecoration: "none" }}
+                                key={index}
+                            >
+                                <div
+                                    className="rightbarFollowing"
+                                    key={index}>
+                                    <img
+                                        src={friend?.profilePicture?.url || "/assets/noAvatar.png"}
+                                        alt=""
+                                        className="rightbarFollowingImg"
+                                    />
+                                    <span
+                                        className='rightbarFollowingName'
+                                    >{friend.name}</span>
+                                </div>
+                            </Link>
+                        ))
+                    }
+                </div>
+
+                <h4 className='rightbarTitle'>Online Friends: {onlineFriends && <span>{onlineFriends.length}</span>}</h4>
+                {onlineFriends &&
+                    <ul className="rightbarFriendList">
+                        {onlineFriends.map(friend => (
+                            <Online key={friend._id} friend={friend} />
+                        ))}
+                    </ul>
+
+                }
             </div>
         </div>
     )

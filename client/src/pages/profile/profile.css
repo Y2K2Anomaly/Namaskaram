@@ -8,13 +8,13 @@
 }
 
 .profileCover {
-    width: 100%;
+    max-width: 100vw;
     height: 60vh;
     position: relative;
 }
 
 .profileCoverImg {
-    width: 100%;
+    min-width: 100%;
     height: 62%;
     object-fit: cover;
     object-position: left;

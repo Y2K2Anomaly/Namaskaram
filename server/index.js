@@ -11,9 +11,18 @@ const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const bodyParser = require('body-parser');
+const cloudinary = require("cloudinary").v2;
+
 
 // middlewares
 dotenv.config();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API,
+    api_secret: process.env.CLOUDINARY_SECRET
+});
+
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
@@ -44,28 +53,47 @@ connectDB
     .catch(err => console.log(err.message))
 
 
-// uploading file multer
+// uploading file with multer and cloudinary
 app.use(express.urlencoded({ extended: false }))
 
 app.use("/images", express.static(path.join(__dirname, "public/images")))
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "public/images");
-    },
-    filename: (req, file, cb) => {
-        cb(null, req.body.name)
-    }
-})
 
-const upload = multer({ storage });
-app.post("/api/upload", upload.single("file"), (req, res) => {
-    try {
-        return res.status(200).json("File uploaded successfully")
-    } catch (err) {
-        console.log(err)
+    // filename function to generate a unique name for the file
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
     }
-})
+});
+
+const upload = multer({ storage: storage });
+
+app.post("/api/upload", upload.single("file"), async (req, res) => {
+    try {
+        const result = await cloudinary.uploader.upload(req.file.path);
+
+        // secure_URL or imageURL and public_id of the uploaded image from the Cloudinary response
+        const imageUrl = result.secure_url;
+        const publicId = result.public_id;
+
+        return res.status(200).json({ imageUrl, publicId });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: "Something went wrong" });
+    }
+});
+
+app.delete("/api/upload/:public_id", async (req, res) => {
+    try {
+        const { public_id } = req.params;
+        const result = await cloudinary.uploader.destroy(public_id);
+        return res.status(200).json({ message: "File deleted successfully" });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: "Something went wrong" });
+    }
+});
+
 
 // routes
 app.use("/api/users", userRoute)

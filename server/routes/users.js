@@ -15,7 +15,7 @@ router.get('/all', async (req, res) => {
 
 // update user
 router.put("/:id", async (req, res) => {
-    if (req.body.userId === req.params.id || req.body.isAdmin) {
+    if (req.body.userId === req.params.id) {
         if (req.body.password) {
             try {
                 const salt = await bcrypt.genSalt(10)
@@ -38,25 +38,111 @@ router.put("/:id", async (req, res) => {
     }
 })
 
-
 // uploading new profile picture
 router.put("/profile/:username", async (req, res) => {
+    const user = await User.findOne({ username: req.params.username });
+    if (!user || (user.username !== req.params.username)) {
+        return res.status(403).json("You are not authorized to update this profile.");
+    }
 
-    const user = await User.findOne({ _id: req.body.userId })
+    try {
+        const updateData = req.body.profilePicture?.url
+            ? {
+                "profilePicture.url": req.body.profilePicture.url,
+                "profilePicture.public_id": req.body.profilePicture.public_id,
+            }
+            : req.body.coverPicture?.url
+                ? {
+                    "coverPicture.url": req.body.coverPicture.url,
+                    "coverPicture.public_id": req.body.coverPicture.public_id,
+                }
+                : {};
 
-    if (user?.username === req.params.username && user?.isAdmin) {
-        try {
-            const updatedUser = await User.findOneAndUpdate(
-                { username: req.params.username },
-                req.body.userImg ? { profilePicture: req.body.userImg } : { coverPicture: req.body.coverImg },
-                { new: true }
-            );
-            await updatedUser.save();
-            console.log(updatedUser);
-            res.status(200).json(updatedUser);
-        } catch (err) {
-            res.status(500).json(err)
+        const updatedUser = await User.findOneAndUpdate(
+            { username: req.params.username },
+            updateData,
+            { new: true }
+        );
+
+        res.status(200).json(updatedUser);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+
+
+// Remove user's profile picture or cover picture
+// DELETE   #Profile_Picture
+router.put('/user/picture/:username', async (req, res) => {
+    console.log(req.body)
+    const user = await User.findOne({ username: req.params.username });
+    if (!user || (user.username !== req.params.username)) {
+        return res.status(403).json("You are not authorized to update this profile.");
+    }
+    console.log(user)
+    try {
+
+        // Check if the user has a profile picture
+        if (req.body.profilePicture.public_id) {
+            // Delete the picture from Cloudinary
+            await cloudinary.uploader.destroy(user.profilePicture.public_id);
         }
+
+        const updateData = req.body.profilePicture?.url
+            ? {
+                "profilePicture.url": "",
+                "profilePicture.public_id": "",
+            }
+            : {};
+
+        const updatedUser = await User.findOneAndUpdate(
+            { username: req.params.username },
+            updateData,
+            { new: true }
+        );
+
+        res.status(200).json({ message: 'Profile picture deleted successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Failed to delete profile picture' });
+    }
+});
+
+// DELETE #Cover_Picture
+router.put('/cover/picture/:username', async (req, res) => {
+    console.log(req.body)
+    const user = await User.findOne({ username: req.params.username });
+    if (!user || (user.username !== req.params.username)) {
+        return res.status(403).json("You are not authorized to update this profile.");
+    }
+    console.log(user)
+    try {
+
+        // Check if the user has a profile picture
+        if (req.body.coverPicture.public_id) {
+            // Delete the picture from Cloudinary
+            await cloudinary.uploader.destroy(user.coverPicture.public_id);
+        }
+
+        const updateData = req.body.coverPicture?.url
+            ? {
+                "coverPicture.url": "",
+                "coverPicture.public_id": "",
+            }
+            : {};
+
+        const updatedUser = await User.findOneAndUpdate(
+            { username: req.params.username },
+            updateData,
+            { new: true }
+        );
+
+
+        res.status(200).json({ message: 'Cover picture deleted successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Failed to delete cover picture' });
     }
 });
 
@@ -103,8 +189,8 @@ router.get("/friends/:userId", async (req, res) => {
         )
         let friendList = [];
         friends.map((friend) => {
-            const { _id, username, profilePicture } = friend;
-            friendList.push({ _id, username, profilePicture })
+            const { _id, name, username, profilePicture } = friend;
+            friendList.push({ _id, name, username, profilePicture })
         });
         res.status(200).json(friendList)
     } catch (err) {
