@@ -22,6 +22,16 @@ const Register = () => {
     const [file, setFile] = useState(null);
     const [profilePicture, setProfilePicture] = useState('');
 
+    const [isValid, setIsValid] = useState(true)
+
+    const handleUsernameChange = (e) => {
+        const value = e.target.value;
+        const regexPattern = /^@[a-z0-9]+(_[a-z0-9]+)*$/;
+        setIsValid(regexPattern.test(value) && !/\s/.test(value));
+
+        setUsername(value);
+    };
+
     useEffect(() => {
         const submitPicture = async () => {
 
@@ -41,18 +51,9 @@ const Register = () => {
         submitPicture();
     }, [file])
 
-    const [isValid, setIsValid] = useState(true)
-
-    const handleUsernameChange = (e) => {
-        const value = e.target.value;
-        const regexPattern = /^@[a-z0-9]+(_[a-z0-9]+)*$/;
-        setIsValid(regexPattern.test(value) && !/\s/.test(value));
-
-        setUsername(value);
-    };
-
     const handleClick = async (e) => {
         e.preventDefault();
+
         if (passwordAgain.current.value !== password.current.value) {
             password.current.setCustomValidity("Password don't match")
         } else {
@@ -96,18 +97,18 @@ const Register = () => {
                     <form className="registerBox" onSubmit={handleClick}>
                         <h1>Register Account</h1>
                         <div className='userImage'>
-                            <img src={profilePicture ? profilePicture.imageUrl : "assets/noAvatar.png"} alt="" />
+                            <img src={file ? URL.createObjectURL(file) : "assets/noAvatar.png"} alt="" />
                             <div className="addImageButton">
                                 <IconButton>
                                     <AddAPhoto color="primary" sx={{ fontSize: 28 }} />
+                                    <input
+                                        name="file"
+                                        type="file"
+                                        id="file"
+                                        accept=".png, .jpeg, .jpg"
+                                        onChange={(e) => setFile(e.target.files[0])}
+                                    />
                                 </IconButton>
-                                <input
-                                    name="file"
-                                    type="file"
-                                    id="file"
-                                    accept=".png, .jpeg, .jpg"
-                                    onChange={(e) => setFile(e.target.files[0])}
-                                />
                             </div>
                         </div>
                         <input

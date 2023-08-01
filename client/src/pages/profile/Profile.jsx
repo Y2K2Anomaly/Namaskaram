@@ -138,6 +138,14 @@ export default function Profile() {
                                 currentUser.username === username && <div className="addCoverButton" onClick={coverHandleClick}>
                                     <IconButton>
                                         <AddAPhoto sx={{ fontSize: 35, color: "gray" }} />
+                                        <input
+                                            name="file2"
+                                            type="file"
+                                            id="file2"
+                                            accept=".png, .jpeg, .jpg"
+                                            onChange={(e) => setFile2(e.target.files[0])}
+                                            className="coverButtonInput"
+                                        />
                                     </IconButton>
                                     {
                                         coverBtnOpen && (
@@ -150,14 +158,6 @@ export default function Profile() {
                                             </div>
                                         )
                                     }
-                                    <input
-                                        name="file2"
-                                        type="file"
-                                        id="file2"
-                                        accept=".png, .jpeg, .jpg"
-                                        onChange={(e) => setFile2(e.target.files[0])}
-                                        className="coverButtonInput"
-                                    />
 
                                 </div>
                             }
@@ -171,6 +171,14 @@ export default function Profile() {
                                     currentUser.username === username && <div className="addImageButton" onClick={userHandleClick}>
                                         <IconButton>
                                             <AddAPhoto color="success" sx={{ fontSize: 28 }} />
+                                            <input
+                                                name="file1"
+                                                type="file"
+                                                id="file1"
+                                                accept=".png, .jpeg, .jpg"
+                                                onChange={(e) => setFile1(e.target.files[0])}
+                                                className="coverButtonInput"
+                                            />
                                         </IconButton>
                                         {
                                             userBtnOpen && (
@@ -184,14 +192,6 @@ export default function Profile() {
                                                 </div>
                                             )
                                         }
-                                        <input
-                                            name="file1"
-                                            type="file"
-                                            id="file1"
-                                            accept=".png, .jpeg, .jpg"
-                                            onChange={(e) => setFile1(e.target.files[0])}
-                                            className="coverButtonInput"
-                                        />
 
                                     </div>
                                 }

@@ -6,7 +6,6 @@ const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
 
     const [friends, setFriends] = useState([]);
     const [onlineFriends, setOnlineFriends] = useState([]);
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
     useEffect(() => {
         const getFriends = async () => {
@@ -36,10 +35,10 @@ const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
                 onlineFriends?.map((onlineFriend) => (
                     <div className="chatOnlineFriend" onClick={() => { handleClick(onlineFriend) }}>
                         <div className="chatOnlineImgContainer">
-                            <img className='chatOnlineImg' src={onlineFriend.profilePicture ? PF + onlineFriend.profilePicture : PF + "person/noAvatar.png"} alt="" />
+                            <img className='chatOnlineImg' src={onlineFriend?.profilePicture?.url || "/assets/noAvatar.png"} alt="" />
                             <div className="chatOnlineBadge"></div>
                         </div>
-                        <span className="chatOnlineName">{onlineFriend.username}</span>
+                        <span className="chatOnlineName">{onlineFriend.name}</span>
                     </div>
                 ))
             }
