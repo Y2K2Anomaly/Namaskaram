@@ -76,7 +76,7 @@ const Rightbar = React.memo(() => {
     // Fetching Online Friends
     useEffect(() => {
 
-        socket.current = io("ws://localhost:8000");
+        socket.current = io("wss://namaskaram-client.vercel.app");
 
         // Emitting 'addUser' event to let the server know about the current user
         socket.current.emit("addUser", currentUser._id);
