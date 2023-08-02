@@ -1,6 +1,6 @@
 const { Server } = require("socket.io");
 
-const io = new Server("wss://namaskaram-socketio.vercel.app", {
+const io = new Server("https://namaskaram-socketio.vercel.app", {
     cors: {
         origin: "https://namaskaram-client.vercel.app",
     },
