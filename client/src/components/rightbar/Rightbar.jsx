@@ -148,7 +148,7 @@ const Rightbar = React.memo(() => {
                         <span className="rightbarInfoValue">{user.relationship === 1 ? "Single" : user.relationship === 2 ? "Married" : "-"}</span>
                     </div>
                 </div>
-                <h4 className='rightbarTitle'>User friends</h4>
+                <h4 className='rightbarTitle'>User friends: {userFriends && <span>{userFriends.length}</span>}</h4>
                 <div className="rightbarFollowings">
                     {
                         userFriends.map((friend, index) => (
@@ -173,6 +173,7 @@ const Rightbar = React.memo(() => {
                         ))
                     }
                 </div>
+
 
                 {currentUser.username === user.username ? (
                     <div>
