@@ -76,7 +76,9 @@ const Rightbar = React.memo(() => {
     // Fetching Online Friends
     useEffect(() => {
         const fetchOnlineFriends = async () => {
-            const socket = io("https://namaskaram-socketio.vercel.app");
+            const socket = io("https://namaskaram-socketio.vercel.app", {
+                transports: ["websocket"], // websocket transport to avoid CORS issues after app deployment
+            });
 
             // Emitting 'addUser' event to let the server know about the current user
             socket.emit("addUser", currentUser._id);
