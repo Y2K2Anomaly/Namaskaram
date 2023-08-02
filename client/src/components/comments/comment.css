@@ -1,0 +1,80 @@
+.commentContainer {
+    margin: 10px 15px;
+    padding-bottom: 10px;
+}
+
+.commentInput {
+    width: 90%;
+    height: 25px;
+    border-radius: 15px;
+    border: 1px solid gray;
+}
+
+.commentInputWrapper {
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #EEEEFF;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.commentInputButton {
+    padding: 4px 15px;
+    border-radius: 5px;
+    margin-left: 8px;
+    outline: none;
+    border: none;
+    border: 1px solid gray;
+    transition: all 0.3s ease-in-out;
+}
+
+.commentInputButton:hover {
+    background-color: #fff;
+}
+
+.commentWrapper {
+    background-color: #eaf4fc;
+    border-radius: 10px;
+    padding-bottom: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.comment {
+    margin: 15px;
+    padding: 10px 5px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* text-align: left; */
+}
+
+.commentImg {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: conver;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.userComment {
+    margin: 0 10px;
+}
+
+.commentWrapper h3 {
+    color: #333;
+}
+
+.namePictureComment {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.namePictureComment h5 {
+    cursor: pointer;
+}

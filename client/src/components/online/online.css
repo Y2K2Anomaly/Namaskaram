@@ -1,7 +1,15 @@
 .rightbarFriend {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 6px;
+    padding: 15px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+}
+
+.rightbarFriend:hover {
+    background-color: rgb(245, 243, 243);
 }
 
 .rightbarProfileImgContainer {

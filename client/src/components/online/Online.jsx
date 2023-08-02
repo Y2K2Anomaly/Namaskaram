@@ -1,10 +1,12 @@
 import React from 'react';
 import "./online.css";
+import { useNavigate } from "react-router";
 
-const online = ({ friend }) => {
+const Online = ({ friend }) => {
+    const navigate = useNavigate();
     return (
         <>
-            <li className="rightbarFriend">
+            <li className="rightbarFriend" onClick={() => navigate(`/profile/${friend.username}`)}>
                 <div className="rightbarProfileImgContainer">
                     <img className="rightbarProfileImg" src={friend?.profilePicture?.url || "/assets/noAvatar.png"} alt="" />
                     <span className="rightbarOnline"></span>
@@ -15,4 +17,4 @@ const online = ({ friend }) => {
     )
 }
 
-export default online
+export default Online

@@ -6,9 +6,12 @@ import { useNavigate } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import { AuthContext } from '../../context/AuthContext';
 import { IconButton } from '@mui/material';
+import Comment from '../comments/Comment';
 
 const Post = ({ post, onDelete, onEdit }) => {
-    const [likeCount, setLikeCount] = useState(post.likes?.length ?? 0); // Handle undefined likes array
+    const [likeCount, setLikeCount] = useState(post.likes?.length ?? 0); // Handled undefined likes array
+    const [comments, setComments] = useState([]);
+    const [isOpen, setIsOpen] = useState(false);
     const [like, setLike] = useState(false);
     const [user, setUser] = useState({});
     const { user: currentUser } = useContext(AuthContext);
@@ -17,6 +20,20 @@ const Post = ({ post, onDelete, onEdit }) => {
     useEffect(() => {
         setLike(post.likes?.includes(currentUser._id) ?? false); // Handle undefined likes array
     }, [currentUser._id, post.likes]);
+
+    useEffect(() => {
+        const getComments = async () => {
+
+            try {
+                const res = await axios.get(`/post/comments/${post._id}`)
+                setComments(res.data)
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        getComments()
+    }, [])
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -146,27 +163,33 @@ const Post = ({ post, onDelete, onEdit }) => {
                 <div className="postBottom">
                     <div className="postBottomLeft">
                         {!like ? (
-                            <FavoriteBorder
-                                className="bottomIcons"
-                                onClick={likeHandler}
-                                sx={{ fontSize: 23 }}
-                            />
+                            <IconButton onClick={likeHandler}>
+
+                                <FavoriteBorder
+                                    className="bottomIcons"
+                                    sx={{ fontSize: 23 }}
+                                />
+                            </IconButton>
                         ) : (
-                            <Favorite
-                                htmlColor='tomato'
-                                className="bottomIcons"
-                                onClick={likeHandler}
-                                sx={{ fontSize: 23 }}
-                            />
+                            <IconButton onClick={likeHandler}>
+                                <Favorite
+                                    htmlColor='tomato'
+                                    className="bottomIcons"
+                                    sx={{ fontSize: 23 }}
+                                />
+                            </IconButton>
                         )}
-                        <ChatBubbleOutline className="bottomIcons" sx={{ fontSize: 22 }} />
+                        <IconButton onClick={() => setIsOpen(!isOpen)}>
+                            <ChatBubbleOutline className="bottomIcons" sx={{ fontSize: 22 }}></ChatBubbleOutline>
+                        </IconButton>
                     </div>
                     <div className="postBottomRight">
-                        <span className="postCommentText">{post.comment} comment</span>
+                        <span className="postCommentText">{comments.length} comment</span>
                     </div>
                 </div>
                 <span className="postLikeCounter">{likeCount} people like it</span>
             </div>
+            {isOpen && <Comment currentUser={currentUser} post={post} comments={comments} setComments={setComments} />}
         </div>
     );
 };

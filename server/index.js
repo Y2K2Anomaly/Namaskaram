@@ -4,9 +4,12 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const userRoute = require("./routes/users");
+const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
 const conversationRoute = require("./routes/conversations");
 const messageRoute = require("./routes/messages");
+const commentRoute = require("./routes/comments");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
@@ -23,11 +26,11 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_SECRET
 });
 
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 // Middleware to parse JSON data
-app.use(bodyParser.json());
 
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
@@ -35,14 +38,12 @@ app.use(cors({
     origin: "http://localhost:3000"
 }));
 
-// routes import
-const userRoute = require("./routes/users");
-const authRoute = require("./routes/auth");
-
-
 const connectDB = mongoose.connect(
     process.env.MONGO_URL,
-    { useNewUrlParser: true }
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }
 )
 
 connectDB
@@ -101,6 +102,7 @@ app.use("/api/auth", authRoute)
 app.use("/api/posts", postRoute)
 app.use("/api/conversations", conversationRoute)
 app.use("/api/messages", messageRoute)
+app.use("/api/post/comments", commentRoute)
 
 
 const PORT = process.env.PORT || 8080;

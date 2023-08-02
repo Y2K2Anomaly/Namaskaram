@@ -1,9 +1,11 @@
 .sidebarFriend {
     display: flex;
     align-items: center;
-    margin-bottom: 0.9375em;
-    padding: 0.625em 0;
+    margin-bottom: 0.300em;
+    padding: 0.800em 0.700em;
     cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.1s ease-in-out;
 }
 
 .sidebarFriend:hover {
