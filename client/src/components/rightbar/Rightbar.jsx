@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import "./rightbar.css";
 import Online from "../online/Online";
 import axios from "axios";
@@ -72,36 +72,35 @@ const Rightbar = React.memo(() => {
         setFollowed(!followed)
     };
 
-
+    const socket = useRef();
     // Fetching Online Friends
     useEffect(() => {
-        const fetchOnlineFriends = async () => {
-            const socket = io("http://localhost:8000");
 
-            // Emitting 'addUser' event to let the server know about the current user
-            socket.emit("addUser", currentUser._id);
-            socket.emit("addUser", user._id);
+        socket.current = io("ws://localhost:8000");
 
-            // Listening for 'getUsers' event to get the online users array 
-            socket.on("getUsers", (users) => {
-                const onlineFriendIds = users.map(user => user.userId);
-                const onlineFriends = currentUserFriends.filter(friend => onlineFriendIds.includes(friend._id));
-                setCurrentUserOnlineFriends(onlineFriends)
-            });
-            socket.on("getUsers", (users) => {
-                const onlineFriendIds = users.map(user => user.userId);
-                const onlineFriends = userFriends.filter(friend => onlineFriendIds.includes(friend._id));
-                setUserOnlineFriends(onlineFriends)
-            });
+        // Emitting 'addUser' event to let the server know about the current user
+        socket.current.emit("addUser", currentUser._id);
+        socket.current.emit("addUser", user._id);
 
-            // Cleaning up the socket connection when the component unmounts
-            return () => {
-                socket.disconnect();
-            };
+        // Listening for 'getUsers' event to get the online users array
+        socket.current.on("getUsers", (users) => {
+            const onlineFriendIds = users.map((user) => user.userId);
+            const onlineFriends = currentUserFriends.filter(friend => onlineFriendIds.includes(friend._id)
+            );
+            setCurrentUserOnlineFriends(onlineFriends);
+        });
+        socket.current.on("getUsers", (users) => {
+            const onlineFriendIds = users.map((user) => user.userId);
+
+            const onlineFriends = userFriends.filter(friend => onlineFriendIds.includes(friend._id)
+            );
+            setUserOnlineFriends(onlineFriends);
+        });
+
+        // Cleaning up the socket connection when the component unmounts
+        return () => {
+            socket.current.disconnect();
         };
-
-        fetchOnlineFriends();
-
     }, [user?._id, currentUser._id, currentUserFriends, userFriends]);
 
     const dateString = user?.dateOfBirth;
