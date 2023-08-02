@@ -1,12 +1,6 @@
-const express = require("express");
-const http = require("http");
 const { Server } = require("socket.io");
 
-const app = express();
-const server = http.createServer(app);
-
-// const io = new Server("socket.io")("https://namaskaram-socketio.vercel.app", {
-const io = new Server(server, {
+const io = new Server("https://namaskaram-socketio.vercel.app", {
     cors: {
         origin: "https://namaskaram-client.vercel.app",
     },
