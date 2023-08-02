@@ -22,7 +22,7 @@ const Messenger = () => {
   const socket = useRef();
 
   useEffect(() => {
-    socket.current = io("wss://namaskaram-socketio.vercel.app");
+    socket.current = io("https://namaskaram-socketio.vercel.app");
     socket.current.on("getMessage", data => {
       setArrivalMessage({
         sender: data.senderId,
