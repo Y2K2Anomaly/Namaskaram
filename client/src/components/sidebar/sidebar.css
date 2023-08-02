@@ -34,9 +34,11 @@
 .sidebarListItem {
     display: flex;
     align-items: center;
-    margin-bottom: 1.25em;
-    padding: 0.625em;
+    margin-bottom: 0.25em;
+    padding: 1em;
     cursor: pointer;
+    border-radius: 15px;
+    transition: all .1s ease-in-out;
 }
 
 .sidebarListItem:hover {
