@@ -38,6 +38,15 @@ app.use(cors({
     origin: "https://namaskaram-client.vercel.app"
 }));
 
+// middlewares to enable CORS for all routes
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://namaskaram-client.vercel.app');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
+
+
 const connectDB = mongoose.connect(
     process.env.MONGO_URL,
     {
