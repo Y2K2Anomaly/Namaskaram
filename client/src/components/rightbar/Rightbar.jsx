@@ -76,7 +76,7 @@ const Rightbar = React.memo(() => {
     // Fetching Online Friends
     useEffect(() => {
         const fetchOnlineFriends = async () => {
-            const socket = io("wss://namaskaram-socketio.vercel.app", {
+            const socket = io("ws://namaskaram-socketio.vercel.app", {
                 transports: ["websocket"], // websocket transport to avoid CORS issues after app deployment
             });
 
@@ -142,10 +142,12 @@ const Rightbar = React.memo(() => {
                         <span className="rightbarInfoKey">From: </span>
                         <span className="rightbarInfoValue">{user.from}</span>
                     </div>
-                    <div className="rightbarInfoItem">
-                        <span className="rightbarInfoKey">Date Of Birth: </span>
-                        <span className="rightbarInfoValue">{DOBformatted ? DOBformatted : ""}</span>
-                    </div>
+                    {user.dateOfBirth && (
+                        <div className="rightbarInfoItem">
+                            <span className="rightbarInfoKey">Date Of Birth: </span>
+                            <span className="rightbarInfoValue">{DOBformatted}</span>
+                        </div>
+                    )}
                     <div className="rightbarInfoItem">
                         <span className="rightbarInfoKey">Relationship: </span>
                         <span className="rightbarInfoValue">{user.relationship === 1 ? "Single" : user.relationship === 2 ? "Married" : "-"}</span>
