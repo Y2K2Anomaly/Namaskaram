@@ -74,20 +74,13 @@ router.put("/profile/:username", async (req, res) => {
 
 // Remove user's profile picture or cover picture
 // DELETE   #Profile_Picture
-router.put('/user/picture/:username', async (req, res) => {
-    console.log(req.body)
+router.put('/picture/:username', async (req, res) => {
     const user = await User.findOne({ username: req.params.username });
     if (!user || (user.username !== req.params.username)) {
         return res.status(403).json("You are not authorized to update this profile.");
     }
-    console.log(user)
-    try {
 
-        // Check if the user has a profile picture
-        if (req.body.profilePicture.public_id) {
-            // Delete the picture from Cloudinary
-            await cloudinary.uploader.destroy(user.profilePicture.public_id);
-        }
+    try {
 
         const updateData = req.body.profilePicture?.url
             ? {
@@ -96,7 +89,7 @@ router.put('/user/picture/:username', async (req, res) => {
             }
             : {};
 
-        const updatedUser = await User.findOneAndUpdate(
+        await User.findOneAndUpdate(
             { username: req.params.username },
             updateData,
             { new: true }
@@ -111,19 +104,12 @@ router.put('/user/picture/:username', async (req, res) => {
 
 // DELETE #Cover_Picture
 router.put('/cover/picture/:username', async (req, res) => {
-    console.log(req.body)
     const user = await User.findOne({ username: req.params.username });
     if (!user || (user.username !== req.params.username)) {
         return res.status(403).json("You are not authorized to update this profile.");
     }
-    console.log(user)
-    try {
 
-        // Check if the user has a profile picture
-        if (req.body.coverPicture.public_id) {
-            // Delete the picture from Cloudinary
-            await cloudinary.uploader.destroy(user.coverPicture.public_id);
-        }
+    try {
 
         const updateData = req.body.coverPicture?.url
             ? {
@@ -132,12 +118,11 @@ router.put('/cover/picture/:username', async (req, res) => {
             }
             : {};
 
-        const updatedUser = await User.findOneAndUpdate(
+        await User.findOneAndUpdate(
             { username: req.params.username },
             updateData,
             { new: true }
         );
-
 
         res.status(200).json({ message: 'Cover picture deleted successfully' });
     } catch (err) {

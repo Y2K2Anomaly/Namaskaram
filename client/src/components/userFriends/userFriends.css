@@ -1,4 +1,4 @@
-.chatOnlineFriend {
+.userFriend {
     background-color: #fff;
     margin: 0.625em 0;
     padding: 1.2em 0.8em;
@@ -9,7 +9,7 @@
     cursor: pointer;
 }
 
-.chatOnlineFriend:hover {
+.userFriend:hover {
     background-color: #a6cbfa;
 }
 
@@ -17,19 +17,19 @@
     background-color: #a6cbfa;
 }
 
-.chatOnlineImgContainer {
+.userFriendImgContainer {
     position: relative;
     margin-right: 15px;
 }
 
-.chatOnlineImg {
+.userFriendImg {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
 }
 
-.chatOnlineBadge {
+.userOnlineBadge {
     width: 12px;
     height: 12px;
     border-radius: 50%;
@@ -39,6 +39,7 @@
     top: 60%;
     left: 75%;
 }
+
 
 .msgTime {
     margin-left: auto;

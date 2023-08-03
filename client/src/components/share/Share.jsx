@@ -63,9 +63,7 @@ const Share = ({ onPostShare }) => {
         <div className='share'>
             <div className="shareWrapper">
                 <div className="shareTop">
-                    <img className='shareProfileImg' src={
-                        sameUser?.profilePicture?.url || currentUser?.profilePicture?.url || '/assets/noAvatar.png'
-                    } alt="" />
+                    <img className='shareProfileImg' src={sameUser?.username === currentUser.username ? (sameUser?.profilePicture?.url || "/assets/noAvatar.png") : "/assets/noAvatar.png"} alt="" />
                     <input
                         type="text"
                         className="shareInput"

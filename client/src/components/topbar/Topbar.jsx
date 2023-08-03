@@ -78,8 +78,7 @@ const Topbar = () => {
                 <Link to={`/profile/${currentUser?.username}`}>
                     <IconButton>
                         <img
-                            src={sameUser.profilePicture?.url || currentUser?.profilePicture?.url || "/assets/noAvatar.png"
-                            }
+                            src={sameUser?.username === currentUser.username ? (sameUser?.profilePicture?.url || "/assets/noAvatar.png") : "/assets/noAvatar.png"}
                             alt="img"
                             className='topbarImg'
                         />

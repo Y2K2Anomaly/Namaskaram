@@ -33,12 +33,16 @@ const ChatOnline = ({ onlineUsers, currentId, setCurrentChat }) => {
         <div className='chatOnline'>
             {
                 onlineFriends?.map((onlineFriend) => (
-                    <div className="chatOnlineFriend" onClick={() => { handleClick(onlineFriend) }}>
+                    <div key={onlineFriend._id} className="chatOnlineFriend" onClick={() => { handleClick(onlineFriend) }}>
                         <div className="chatOnlineImgContainer">
                             <img className='chatOnlineImg' src={onlineFriend?.profilePicture?.url || "/assets/noAvatar.png"} alt="" />
                             <div className="chatOnlineBadge"></div>
                         </div>
-                        <span className="chatOnlineName">{onlineFriend.name}</span>
+                        <div className='nameMsg'>
+                            <span className="chatOnlineName">{onlineFriend.name}</span>
+                            <p className='newMsg'>{"New Message, click to see!rggggggggggggggggfgtyyyyyyyuhghhhhhhhhhhftytgggggggggg".substring(0, 33)}...</p>
+                        </div>
+                        <span className='msgTime'>08:00am</span>
                     </div>
                 ))
             }

@@ -7,7 +7,10 @@ import ChatOnline from '../../components/chatOnline/ChatOnline';
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 import { io } from 'socket.io-client';
-
+import { ArrowBackIos, MoreVert } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import StyledBadge from '../../components/rippleBadge/StyledBadge';
+import UserFriends from '../../components/userFriends/UserFriends';
 
 const Messenger = () => {
 
@@ -16,10 +19,20 @@ const Messenger = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [currentUserFriends, setCurrentUserFriends] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const { user } = useContext(AuthContext);
   const scrollRef = useRef();
   const socket = useRef();
+
+  useEffect(() => {
+    const getFriends = async () => {
+      const res = await axios.get("/users/friends/" + user._id)
+      setCurrentUserFriends(res.data)
+    }
+
+    getFriends()
+  }, [user])
 
   useEffect(() => {
     socket.current = io("ws://localhost:8000");
@@ -44,7 +57,7 @@ const Messenger = () => {
     })
   }, [user])
 
-
+  console.log(currentUserFriends);
 
   useEffect(() => {
     const getConversations = async () => {
@@ -101,66 +114,120 @@ const Messenger = () => {
 
   return (
     <>
-      <Topbar />
-      <div className="messenger">
-        <div className="chatMenu">
-          <div className="chatMenuWrapper">
-            <div>
-              <h5 className='h5Heading'>Chats</h5>
+      <div className='messengerComponent'>
+        <Topbar />
+        <div className="messenger">
+          <div className="chatMenu">
+            <div className="chatMenuWrapper">
+              <div className='chatMenuHeading'>
+                <h5 className='chatMenuHeading'>Chats</h5>
+              </div>
               <input placeholder='Search for friends' className='chatMenuInput' />
-            </div>
-            {
-              conversations.map((c, index) => (
-                <div onClick={() => setCurrentChat(c)} key={index}>
-                  <Conversation conversation={c} currentUser={user} />
+
+              <hr />
+              <div className="chatOnline">
+                <div className="chatWrapper">
+                  <h5 className='chatHeading'>Online Friends</h5>
+                  <ChatOnline
+                    onlineUsers={onlineUsers}
+                    currentId={user._id}
+                    setCurrentChat={setCurrentChat}
+                  />
                 </div>
-              ))
-            }
-          </div>
-        </div>
-        <div className="chatBox">
-          <div className="chatBoxWrapper">
-            {
-              currentChat ?
-                (
-                  <>
-                    <div className="chatBoxTop">
-                      {
-                        messages.map((m, index) => (
-                          <div ref={scrollRef} key={index} >
-                            <Message message={m} own={m.sender === user._id} currentChat={currentChat} />
-                          </div>
-                        ))
-                      }
+              </div>
+              <hr />
+              <div className="chatOnline">
+                <div className="chatWrapper">
+                  <h5 className='chatHeading'>All Friends</h5>
+                  <UserFriends
+                    onlineUsers={onlineUsers}
+                    userFriends={currentUserFriends}
+                    currentId={user._id}
+                    setCurrentChat={setCurrentChat}
+                  />
+                </div>
+              </div>
+              <div>
+
+                {
+                  conversations?.map((c, index) => (
+                    <div onClick={() => setCurrentChat(c)} key={index}>
+                      <Conversation conversation={c} currentUser={user} />
                     </div>
-                    <div className="chatBoxBottom">
-                      <textarea
-                        className="chatMessageInput"
-                        placeholder='write something...'
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        value={newMessage}
-                      ></textarea>
-                      <button className="chatSubmitButton" onClick={handleSubmit}>
-                        Send
-                      </button>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+
+          <div className="vertical-hr-wrapper">
+            <hr />
+          </div>
+
+          <div className="chatBox">
+            <div className="chatBoxWrapper">
+
+              <div className="chatBoxHeader">
+                <div className="chatBoxHeaderLeft">
+                  <IconButton>
+                    <ArrowBackIos className='backIcon' sx={{ fontSize: "25px" }} />
+                  </IconButton>
+                  <div className="chatBoxHeaderImg">
+                    <img src="/assets/noAvatar.png" alt="" />
+                    <div className='rippleBadge'>
+                      <StyledBadge
+                        overlap='circular'
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right"
+                        }}
+                        variant='dot'
+                      />
                     </div>
-                  </>
-                ) : (
-                  <span className='noConversationText'>Open a Conversation to start a Chat</span>
-                )
-            }
+                  </div>
+                  <div className="nameOnlineContainer">
+                    <h4>Pawan Maurya</h4>
+                    <span className='onlineSpan'>online</span>
+                  </div>
+                </div>
+                <div className="chatBoxHeaderRight">
+                  <IconButton>
+                    <MoreVert sx={{ fontSize: "25px" }} />
+                  </IconButton>
+                </div>
+              </div>
+              {
+                currentChat ?
+                  (
+                    <>
+                      <div className="chatBoxTop">
+                        {
+                          messages.map((m, index) => (
+                            <div ref={scrollRef} key={index} >
+                              <Message message={m} own={m.sender === user._id} currentChat={currentChat} />
+                            </div>
+                          ))
+                        }
+                      </div>
+                      <div className="chatBoxBottom">
+                        <textarea
+                          className="chatMessageInput"
+                          placeholder='write something...'
+                          onChange={(e) => setNewMessage(e.target.value)}
+                          value={newMessage}
+                        ></textarea>
+                        <button className="chatSubmitButton" onClick={handleSubmit}>
+                          Send
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <span className='noConversationText'>Open a Conversation to start a Chat</span>
+                  )
+              }
+            </div>
           </div>
-        </div>
-        <div className="chatOnline">
-          <div className="chatOnlineWrapper">
-            <h5 className='h5Heading'>Online Friends</h5>
-            <ChatOnline
-              onlineUsers={onlineUsers}
-              currentId={user._id}
-              setCurrentChat={setCurrentChat}
-            />
-          </div>
-        </div>
+        </div >
       </div>
     </>
   )
