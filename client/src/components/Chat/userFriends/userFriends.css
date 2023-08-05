@@ -1,0 +1,55 @@
+.userFriend {
+    background-color: #fff;
+    margin: 0.625em 0;
+    padding: 1.2em 0.8em;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.userFriend:hover {
+    background-color: #a6cbfa;
+}
+
+.active {
+    background-color: #a6cbfa;
+}
+
+.userFriendImgContainer {
+    position: relative;
+    margin-right: 15px;
+}
+
+.userFriendImg {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.userOnlineBadge {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: limegreen;
+    border: 1px solid white;
+    position: absolute;
+    top: 60%;
+    left: 75%;
+}
+
+
+.msgTime {
+    margin-left: auto;
+    font-weight: 500;
+    font-size: 1.4rem;
+}
+
+.newMsg {
+    color: #333;
+    font-weight: 400;
+    padding: 4px 0;
+    font-size: 1.4rem;
+}

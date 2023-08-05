@@ -12,6 +12,11 @@
     background-color: rgb(245, 243, 243);
 }
 
+.sidebarFriend:hover .sidebarFriendName {
+    color: #1872f2;
+    transition: all 0.1s ease-out;
+}
+
 .sidebarFriendImg {
     width: 35px;
     height: 35px;

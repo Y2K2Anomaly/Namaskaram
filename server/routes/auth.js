@@ -36,34 +36,22 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
 
     try {
-        const user = await User.findOne({ email: req.body.email })
-        !user && res.status(404).json("user not found!")
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found!' });
+        }
 
-        const validPassword = await bcrypt.compare(req.body.password, user.password)
-        !validPassword && res.status(400).json("wrong password!")
+        const validPassword = await bcrypt.compare(req.body.password, user.password);
+        if (!validPassword) {
+            return res.status(400).json({ error: 'Wrong password!' });
+        }
 
-        res.status(200).json(user)
+        res.status(200).json(user);
     } catch (err) {
-        res.status(500).json(err)
+        console.error('Error during login:', err); // Log the error for debugging purposes
+        res.status(500).json({ error: 'Something went wrong on the server.' });
     }
-})
+});
 
-// set isAdmin during Login
-router.put("/login", async (req, res) => {
-
-    try {
-        const user = await User.findOneAndUpdate(
-            { email: req.body.email },
-            { isAdmin: true },
-            { new: true }
-        )
-        !user && res.status(404).json("user not found!")
-
-        await user.save();
-        res.status(200).send("Login Successfully!")
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
 
 module.exports = router;

@@ -84,15 +84,16 @@ export default function Profile() {
     const onDeleteClick = async ({ pictureType }) => {
         try {
             if (pictureType === 'profilePicture') {
-                console.log(user)
-                await axios.put(`/user/picture/${currentUser.username}`, user);
-                console.log('Profile picture deleted successfully');
+                await axios.delete(`/upload/${user.profilePicture.public_id}`);
+                const res = await axios.put(`/users/picture/${currentUser.username}`, user);
+                console.log(res.data);
             } else if (pictureType === 'coverPicture') {
-                await axios.put(`/cover/picture/${currentUser.username}`, user);
-                console.log('Cover picture deleted successfully');
+                await axios.delete(`/upload/${user.coverPicture.public_id}`);
+                const res = await axios.put(`/users/cover/picture/${currentUser.username}`, user);
+                console.log(res.data);
             }
 
-            // Update the local user state after deletion
+            // Updating the local user state after deletion
             setUser((prevUser) => ({
                 ...prevUser,
                 [pictureType]: {
@@ -101,8 +102,7 @@ export default function Profile() {
                 },
             }));
 
-            // Optional: You can also reload the page to update the UI after deletion
-            // window.location.reload();
+            window.location.reload();
         } catch (err) {
             console.warn(err);
         }

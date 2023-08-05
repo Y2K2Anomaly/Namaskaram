@@ -37,12 +37,17 @@
     margin-bottom: 0.25em;
     padding: 1em;
     cursor: pointer;
-    border-radius: 15px;
+    border-radius: 10px;
     transition: all .1s ease-in-out;
 }
 
 .sidebarListItem:hover {
     background-color: rgb(245, 243, 243);
+}
+
+.sidebarListItem:hover .sidebarListItemText {
+    color: #1872f2;
+    transition: all 0.1s ease-out;
 }
 
 .sidebarIcon {

@@ -13,11 +13,11 @@ const addUser = (userId, socketId) => {
 };
 
 const removeUser = (socketId) => {
-    users = users.filter(user => user.socketId !== socketId)
+    users = users?.filter(user => user.socketId !== socketId)
 }
 
 const getUser = (receiverId) => {
-    return users.find(user => user.userId === receiverId)
+    return users?.find(user => user.userId === receiverId)
 }
 
 io.on("connection", (socket) => {
@@ -32,7 +32,7 @@ io.on("connection", (socket) => {
     // send and get message
     socket.on("sendMessage", ({ senderId, receiverId, text }) => {
         const user = getUser(receiverId);
-        io.to(user.socketId).emit("getMessage", {
+        io.to(user?.socketId).emit("getMessage", {
             senderId,
             text,
         });

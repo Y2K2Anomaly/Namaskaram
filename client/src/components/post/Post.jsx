@@ -33,7 +33,7 @@ const Post = ({ post, onDelete, onEdit }) => {
         }
 
         getComments()
-    }, [])
+    }, [post])
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -153,7 +153,7 @@ const Post = ({ post, onDelete, onEdit }) => {
                             type="text"
                             ref={editedDesc}
                             className='editInput'
-                            placeholder='caption'
+                            placeholder='write a caption...'
                         />
                     ) : (
                         <span className="postText">{post?.desc}</span>
