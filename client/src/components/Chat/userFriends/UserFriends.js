@@ -76,7 +76,9 @@ const UserFriends = ({ onlineUsers, userFriends, currentUserId, setCurrentChat, 
                             </div>
                             <div className='nameMsg'>
                                 <span className="userFriendsName">{userFriend.name}</span>
-                                <p className='newMsg'>{lastMessage?.text.substring(0, 33)}...</p>
+                                <p className='newMsg'>
+                                    {lastMessage?.text.substring(0, 33)}<strong> ...</strong>
+                                </p>
                             </div>
                             <span className='msgTime'>
                                 {moment(lastMessage?.createdAt).fromNow()}

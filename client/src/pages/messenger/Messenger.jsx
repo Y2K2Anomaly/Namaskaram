@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import './messenger.css';
 import Topbar from "../../components/topbar/Topbar";
-import Message from '../../components/message/Message';
-import ChatOnline from '../../components/chatOnline/ChatOnline';
+import Message from '../../components/Chat/message/Message';
+import ChatOnline from '../../components/Chat/chatOnline/ChatOnline';
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 import { ArrowBackIos, MoreVert, Send } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
-import StyledBadge from '../../components/rippleBadge/StyledBadge';
-import UserFriends from '../../components/userFriends/UserFriends';
+import UserFriends from '../../components/Chat/userFriends/UserFriends';
 import { useNavigate } from 'react-router-dom';
+import OnlineBadge from '../../components/Chat/badges/OnlineBadge';
+import OfflineBadge from '../../components/Chat/badges/OfflineBadge';
 
 const Messenger = React.memo(() => {
   const [conversations, setConversations] = useState([]);
@@ -113,8 +114,6 @@ const Messenger = React.memo(() => {
 
     const receiverId = currentChat?.members.find(memberId => memberId !== user._id)
 
-    console.log(receiverId);
-
     socket.current.emit("sendMessage", {
       senderId: user._id,
       receiverId,
@@ -210,23 +209,36 @@ const Messenger = React.memo(() => {
                           <div className="chatBoxHeaderImg">
                             <img src={chatFriend?.profilePicture.url || "/assets/noAvatar.png"} alt="" />
                             <div className='rippleBadge'>
-                              {/* {
-                                chatFriend ? <Circle sx={{ color: "gray" }} /> : ( */}
-                              <StyledBadge
-                                overlap='circular'
-                                anchorOrigin={{
-                                  vertical: "bottom",
-                                  horizontal: "right"
-                                }}
-                                variant='dot'
-                              />
-                              {/* )
-                              } */}
+                              {
+                                onlineUsers.includes(chatFriend._id) ? (
+                                  <OnlineBadge
+                                    overlap='circular'
+                                    anchorOrigin={{
+                                      vertical: "bottom",
+                                      horizontal: "right"
+                                    }}
+                                    variant='dot'
+                                  />
+                                ) : (
+                                  <OfflineBadge
+                                    overlap='circular'
+                                    anchorOrigin={{
+                                      vertical: "bottom",
+                                      horizontal: "right"
+                                    }}
+                                    variant='dot'
+                                  />
+                                )
+                              }
                             </div>
                           </div>
                           <div className="nameOnlineContainer">
                             <h4>{chatFriend?.name}</h4>
-                            <span className='onlineSpan'>online</span>
+                            <span className='onlineSpan'>
+                              {onlineUsers.includes(chatFriend._id) ?
+                                "Online" : "Offline"
+                              }
+                            </span>
                           </div>
                         </div>
                         <div className="chatBoxHeaderRight">
@@ -256,7 +268,7 @@ const Messenger = React.memo(() => {
                       />
                       <IconButton onClick={handleSubmit}>
                         <div className='sendIcon'>
-                          <Send sx={{ color: '#fff', fontSize: "34px" }} />
+                          <Send sx={{ color: '#fff', fontSize: "30px" }} />
                         </div>
                       </IconButton>
                     </div>

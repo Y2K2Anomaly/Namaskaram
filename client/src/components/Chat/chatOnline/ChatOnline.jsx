@@ -9,7 +9,6 @@ const ChatOnline = ({ onlineUsers, userFriends, currentUserId, setCurrentChat, a
     const [allConversations, setAllConversations] = useState([]);
     const [lastMessages, setLastMessages] = useState([]);
 
-
     // Function to get the last message of a conversation
     const getLastMessage = async (conversationId) => {
         try {
@@ -79,7 +78,9 @@ const ChatOnline = ({ onlineUsers, userFriends, currentUserId, setCurrentChat, a
                         </div>
                         <div className='nameMsg'>
                             <span className="chatOnlineName">{onlineFriend?.name}</span>
-                            <p className='newMsg'>{lastMessage?.text}</p>
+                            <p className='newMsg'>
+                                {lastMessage?.text.substring(0, 33)}<strong> ...</strong>
+                            </p>
                         </div>
                         <span className='msgTime'>
                             {moment(lastMessage?.createdAt).fromNow()}

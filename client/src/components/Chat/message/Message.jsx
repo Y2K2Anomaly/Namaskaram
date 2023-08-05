@@ -16,7 +16,7 @@ const Message = ({ message, own, chatFriend, user, onDelete }) => {
 
                 {own && isDelete ? (
                     <IconButton className="deleteButton" onClick={() => onDelete({ messageId: message._id })}>
-                        <Delete sx={{ fontSize: "15px", color: "red" }} />
+                        <Delete sx={{ fontSize: "18px", color: "red" }} />
                     </IconButton>
                 ) : ""}
             </div>
