@@ -3,6 +3,7 @@
     flex-direction: column;
     margin-top: 20px;
     font-size: 1.6rem;
+    cursor: pointer;
 }
 
 .messageTop {
@@ -20,8 +21,8 @@
 .messageText {
     padding: 10px;
     border-radius: 20px;
-    background-color: #1877f2;
-    color: white;
+    background-color: #fff;
+    color: black;
     max-width: 300px;
 }
 
@@ -35,6 +36,6 @@
 }
 
 .message.own .messageText {
-    background-color: #fff;
-    color: black;
+    background-color: #1877f2;
+    color: white;
 }

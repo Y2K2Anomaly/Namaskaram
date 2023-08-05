@@ -9,6 +9,10 @@
     cursor: pointer;
 }
 
+.onlineUser {
+    padding: 0 20px;
+}
+
 .chatOnlineFriend:hover {
     background-color: #a6cbfa;
 }

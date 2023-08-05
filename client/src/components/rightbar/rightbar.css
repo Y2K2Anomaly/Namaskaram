@@ -7,30 +7,8 @@
     padding: 1.25em 1.25em 0 0;
 }
 
-.birthdayContainer {
-    display: flex;
-    align-items: center;
-}
-
-.birthdayImg {
-    width: 2.5em;
-    height: 2.5em;
-    margin-right: 0.625em;
-}
-
-.birthdayText {
-    font-weight: 300;
-    font-size: 1.5rem;
-}
-
-.rightbarAd {
-    width: 100%;
-    border-radius: 10px;
-    margin: 1.875em 0;
-}
-
 .rightbarTitle {
-    margin-bottom: 1.25em;
+    margin-top: 1.25em;
 }
 
 .rightbarFriendList {
@@ -66,22 +44,33 @@
 .rightbarFollowings {
     display: flex;
     flex-wrap: wrap;
-    /* justify-content: space-between; */
+    text-align: center;
 }
 
 .rightbarFollowing {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1.25em;
+    margin-bottom: 2.2em;
     margin-right: 20px;
     cursor: pointer;
+    width: 100px;
+    height: 100px;
+}
+
+.rightbarFollowingName {
+    color: #333;
+    transition: all 0.1s ease-out;
+}
+
+.rightbarFollowing:hover .rightbarFollowingName {
+    color: #1872f2;
 }
 
 .rightbarFollowingImg {
-    width: 10rem;
-    height: 10rem;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border-radius: 0.5px;
+    border-radius: 1px;
 }
 
 .rightbarFollowButton {

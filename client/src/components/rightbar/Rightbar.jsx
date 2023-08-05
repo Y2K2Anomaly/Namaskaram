@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import "./rightbar.css";
 import Online from "../online/Online";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from '../../context/AuthContext';
 import { Add, Remove } from "@mui/icons-material";
 import { io } from 'socket.io-client';
@@ -13,6 +13,7 @@ const Rightbar = React.memo(() => {
     const [userFriends, setUserFriends] = useState([]);
     const [userOnlineFriends, setUserOnlineFriends] = useState([]);
     const { username } = useParams();
+    const navigate = useNavigate();
     const { user: currentUser, dispatch } = useContext(AuthContext);
     const [currentUserFriends, setCurrentUserFriends] = useState([]);
     const [currentUserOnlineFriends, setCurrentUserOnlineFriends] = useState([]);
@@ -148,48 +149,49 @@ const Rightbar = React.memo(() => {
                         <span className="rightbarInfoValue">{user.relationship === 1 ? "Single" : user.relationship === 2 ? "Married" : "-"}</span>
                     </div>
                 </div>
-                <h4 className='rightbarTitle'>User friends: {userFriends && <span>{userFriends.length}</span>}</h4>
+                <h4 className='rightbarTitle'>User friends: {userFriends.length}</h4>
                 <div className="rightbarFollowings">
                     {
-                        userFriends.map((friend, index) => (
-                            <Link
-                                to={`/profile/${friend.username}`}
-                                style={{ textDecoration: "none" }}
-                                key={index}
-                            >
+                        userFriends.length ? (
+                            userFriends.map((friend, index) => (
                                 <div
                                     className="rightbarFollowing"
-                                    key={index}>
+                                    key={index}
+                                    onClick={() => navigate(`/profile/${friend.username}`)}
+                                >
                                     <img
                                         src={friend?.profilePicture?.url || "/assets/noAvatar.png"}
                                         alt="_img"
                                         className="rightbarFollowingImg"
                                     />
-                                    <span
-                                        className='rightbarFollowingName'
-                                    >{friend.name}</span>
+                                    <span className='rightbarFollowingName'>{friend.name}</span>
                                 </div>
-                            </Link>
-                        ))
+                            ))
+                        ) : <h5>No User Friends</h5>
                     }
                 </div>
 
 
                 {currentUser.username === user.username ? (
                     <div>
-                        <h4 className='rightbarTitle'>Online Friends: {currentUserOnlineFriends && <span>{currentUserOnlineFriends.length}</span>}</h4>
-                        <ul className="rightbarFriendList">
-                            {currentUserOnlineFriends.map(friend => (
-                                <Online key={friend._id} friend={friend} />
-                            ))}
-                        </ul>
+                        <h4 className='rightbarTitle'>Online Friends: {currentUserOnlineFriends.length}</h4>
+                        {currentUserOnlineFriends.length ? (
+                            <ul className="rightbarFriendList">
+                                {currentUserOnlineFriends.map(friend => (
+                                    <Online key={friend._id} friend={friend} />
+                                ))}
+                            </ul>
+                        ) : <h5>No Online Friends</h5>
+                        }
                     </div>) : (
                     <div>
-                        <h4 className='rightbarTitle'>Online Friends: {userOnlineFriends && <span>{userOnlineFriends.length}</span>}</h4>
+                        <h4 className='rightbarTitle'>Online Friends: {userOnlineFriends.length}</h4>
                         <ul className="rightbarFriendList">
-                            {userOnlineFriends.map(friend => (
-                                <Online key={friend._id} friend={friend} />
-                            ))}
+                            {userOnlineFriends.length ? (
+                                userOnlineFriends.map(friend => (
+                                    <Online key={friend._id} friend={friend} />
+                                ))
+                            ) : <h5>No Online Friends</h5>}
                         </ul>
                     </div>)
                 }
