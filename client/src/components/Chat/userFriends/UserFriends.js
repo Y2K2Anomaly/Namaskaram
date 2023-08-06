@@ -7,6 +7,7 @@ const UserFriends = ({ onlineUsers, userFriends, currentUserId, setCurrentChat, 
 
     const [allConversations, setAllConversations] = useState([]);
     const [lastMessages, setLastMessages] = useState([]);
+    const [toggle, setToggle] = useState(null);
 
     // Function to get the last message of a conversation
     const getLastMessage = async (conversationId) => {
@@ -40,13 +41,14 @@ const UserFriends = ({ onlineUsers, userFriends, currentUserId, setCurrentChat, 
         fetchConversations();
     }, []);
 
-    const handleClick = async (userFriend) => {
+    const handleClick = async (userFriend, index) => {
         const conversationData = {
             receiverId: userFriend._id,
             senderId: currentUserId
         };
         addConversation(conversationData);
         setChatFriend(userFriend);
+        setToggle(index);
         setIsOpen(prev => !prev);
         try {
             const res = await axios.get(`/conversations/find/${currentUserId}/${userFriend._id}`)
@@ -59,14 +61,14 @@ const UserFriends = ({ onlineUsers, userFriends, currentUserId, setCurrentChat, 
     return (
         <div className='userChat'>
             {
-                userFriends?.map((userFriend) => {
+                userFriends?.map((userFriend, index) => {
 
                     const conversation = allConversations?.filter(conversation => (conversation.members?.includes(userFriend._id) && conversation.members?.includes(currentUserId)));
                     const conversationId = conversation?.map(conversation => conversation?._id);
                     const [lastMessage] = lastMessages[conversationId] || [];
 
                     return (
-                        <div key={userFriend._id} className="userFriend" onClick={() => { handleClick(userFriend) }}>
+                        <div key={userFriend._id} className={toggle === index ? "userFriend active" : "userFriend"} onClick={() => { handleClick(userFriend, index) }}>
                             <div className="userFriendImgContainer">
                                 <img className='userFriendImg' src={userFriend?.profilePicture?.url || "/assets/noAvatar.png"} alt="" />
                                 {

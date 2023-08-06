@@ -93,7 +93,7 @@
 }
 
 @media (max-width: 675px) {
-    .rightbar {
+    .hide {
         display: none;
     }
 }

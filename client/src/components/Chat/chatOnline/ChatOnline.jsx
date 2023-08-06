@@ -8,6 +8,7 @@ const ChatOnline = ({ onlineUsers, userFriends, currentUserId, setCurrentChat, a
     const [onlineFriends, setOnlineFriends] = useState([]);
     const [allConversations, setAllConversations] = useState([]);
     const [lastMessages, setLastMessages] = useState([]);
+    const [toggle, setToggle] = useState(null);
 
     // Function to get the last message of a conversation
     const getLastMessage = async (conversationId) => {
@@ -45,13 +46,14 @@ const ChatOnline = ({ onlineUsers, userFriends, currentUserId, setCurrentChat, a
         setOnlineFriends(userFriends.filter((friend) => onlineUsers.includes(friend._id)));
     }, [userFriends, onlineUsers])
 
-    const handleClick = async (onlineFriend) => {
+    const handleClick = async (onlineFriend, index) => {
         const conversationData = {
             receiverId: onlineFriend._id,
             senderId: currentUserId
         };
         addConversation(conversationData)
         setChatFriend(onlineFriend)
+        setToggle(index)
         setIsOpen(prev => !prev)
         try {
             const res = await axios.get(`/conversations/find/${currentUserId}/${onlineFriend._id}`)
@@ -64,14 +66,14 @@ const ChatOnline = ({ onlineUsers, userFriends, currentUserId, setCurrentChat, a
 
     return (
         <div className='onlineUser'>
-            {onlineFriends?.map((onlineFriend) => {
+            {onlineFriends?.map((onlineFriend, index) => {
 
                 const conversation = allConversations?.filter(conversation => (conversation.members?.includes(onlineFriend._id) && conversation.members?.includes(currentUserId)));
                 const conversationId = conversation?.map(conversation => conversation?._id);
                 const [lastMessage] = lastMessages[conversationId] || [];
 
                 return (
-                    <div key={onlineFriend._id} className="chatOnlineFriend" onClick={() => { handleClick(onlineFriend) }}>
+                    <div key={onlineFriend._id} className={toggle === index ? "chatOnlineFriend active" : "chatOnlineFriend"} onClick={() => { handleClick(onlineFriend, index) }}>
                         <div className="chatOnlineImgContainer">
                             <img className='chatOnlineImg' src={onlineFriend?.profilePicture?.url || "/assets/noAvatar.png"} alt="" />
                             <div className="chatOnlineBadge"></div>

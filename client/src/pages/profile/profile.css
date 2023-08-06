@@ -8,8 +8,8 @@
 }
 
 .profileCover {
-    max-width: 100vw;
-    height: 60vh;
+    min-width: 100%;
+    height: 50vh;
     position: relative;
 }
 
@@ -18,6 +18,10 @@
     height: 62%;
     object-fit: cover;
     object-position: left;
+}
+
+.profileCover img {
+    width: 100%;
 }
 
 .addCoverButton {
@@ -85,4 +89,34 @@
 
 .profileRightBottom {
     display: flex;
+}
+
+@media (max-width: 675px) {
+    .profileRightBottom {
+        flex-direction: column;
+    }
+
+    .feed {
+        order: 2;
+    }
+
+    .rightbar {
+        order: 1;
+        padding: 0 20px;
+        padding-bottom: 20px;
+    }
+
+    .profileUserImg {
+        left: 30%;
+    }
+
+    .addCoverButton {
+        left: 88%;
+    }
+}
+
+@media (max-width: 400px) {
+    .profileUserImg {
+        left: 23%;
+    }
 }

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import Topbar from '../../components/topbar/Topbar';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Rightbar from '../../components/rightbar/Rightbar';
@@ -9,13 +9,14 @@ import { AuthContext } from '../../context/AuthContext';
 const Home = () => {
 
     const { user } = useContext(AuthContext);
+    const [showSidebar, setShowSidebar] = useState(false);
 
     return (
         <>
-            <Topbar />
+            <Topbar setShowSidebar={setShowSidebar} />
             <div className="homeContainer">
-                <Sidebar />
-                <Feed />
+                <Sidebar showSidebar={showSidebar} />
+                <Feed hideFeed={showSidebar} />
                 <Rightbar user={user} />
             </div>
         </>

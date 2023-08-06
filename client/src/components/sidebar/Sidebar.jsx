@@ -9,7 +9,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { AuthContext } from '../../context/AuthContext';
 
-const Sidebar = () => {
+const Sidebar = ({ showSidebar }) => {
     const { user: currentUser } = useContext(AuthContext);
     const navigate = useNavigate();
     const [suggestionList, setSuggestionList] = useState([]);
@@ -26,7 +26,7 @@ const Sidebar = () => {
     }, [currentUser?.followings, currentUser?._id])
 
     return (
-        <div className='sidebar'>
+        <div className={showSidebar ? 'sidebar show' : 'sidebar'}>
             <div className="sidebarWrapper">
                 <ul className="sidebarList">
                     <li className="sidebarListItem" onClick={() => navigate(`/${currentUser.username}/timeline`)}>

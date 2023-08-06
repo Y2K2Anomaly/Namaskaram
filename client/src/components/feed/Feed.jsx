@@ -6,7 +6,7 @@ import axios from "axios";
 import { useLocation, useParams } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 
-const Feed = () => {
+const Feed = ({ hideFeed }) => {
     const [posts, setPosts] = useState([]);
     const [newPosts, setNewPosts] = useState([]);
     const { user } = useContext(AuthContext);
@@ -46,7 +46,7 @@ const Feed = () => {
 
     return (
         <>
-            <div className='feed'>
+            <div className={hideFeed ? 'feed hideFeed' : 'feed'}>
                 <div className="feedWrapper">
 
                     {(username === user.username) && <Share onPostShare={handlePostShare} />}

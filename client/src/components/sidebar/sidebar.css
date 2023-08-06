@@ -73,5 +73,17 @@
 @media (max-width: 975px) {
     .sidebar {
         display: none;
+        max-width: 100vw;
+        height: 100vh;
+    }
+
+    .show {
+        display: block;
+    }
+}
+
+@media (min-width: 976px) {
+    .sidebar {
+        display: block;
     }
 }

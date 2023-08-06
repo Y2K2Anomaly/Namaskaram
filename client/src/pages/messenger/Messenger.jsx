@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import './messenger.css';
 import Topbar from "../../components/topbar/Topbar";
 import Message from '../../components/Chat/message/Message';
-import ChatOnline from '../../components/Chat/chatOnline/ChatOnline';
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 import { io } from 'socket.io-client';
@@ -172,26 +171,8 @@ const Messenger = React.memo(() => {
               <input placeholder='Search for friends' className='chatMenuInput' />
 
               <hr />
-              <div className="chatOnline">
-                <div className="chatWrapper">
-                  <h5 className='chatHeading'>Online Friends: {onlineUsers.length}</h5>
-                  {
-                    onlineUsers.length ? (
-                      <ChatOnline
-                        onlineUsers={onlineUsers}
-                        currentUserId={user._id}
-                        userFriends={currentUserFriends}
-                        setCurrentChat={setCurrentChat}
-                        addConversation={addConversation}
-                        setChatFriend={setChatFriend}
-                        setIsOpen={setIsOpen}
-                      />
-                    ) : <h6>No Online Friends</h6>
-                  }
-                </div>
-              </div>
-              <hr />
-              <div className="chatOnline">
+
+              <div className="chat">
                 <div className="chatWrapper">
                   <h5 className='chatHeading'>All Friends: {currentUserFriends.length}</h5>
                   {

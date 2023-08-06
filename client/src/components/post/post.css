@@ -62,16 +62,19 @@
     height: 32px;
     border-radius: 50%;
     object-fit: cover;
+    cursor: pointer;
 }
 
 .postUsername {
     font-size: 1.5rem;
     font-weight: 500;
     margin: 0 10px;
+    cursor: pointer;
 }
 
 .postDate {
     font-size: 1.2rem;
+    cursor: default;
 }
 
 .postCenter {
