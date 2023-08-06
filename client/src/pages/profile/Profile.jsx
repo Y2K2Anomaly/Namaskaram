@@ -149,52 +149,55 @@ export default function Profile() {
                                     </IconButton>
                                     {
                                         coverBtnOpen && (
-                                            <div>
-                                                <ul className="optionsButtonContainer">
-                                                    <li onClick={handlePictureUpload}>{!file2 ? "Upload" : "Save"}</li>
-                                                    <hr />
-                                                    <li onClick={() => onDeleteClick({ pictureType: 'coverPicture' })}>Remove</li>
-                                                </ul>
-                                            </div>
+                                            <ul className="coverOptionButton">
+                                                <li onClick={handlePictureUpload}>{!file2 ? "Upload" : "Save"}</li>
+                                                <hr />
+                                                <li onClick={() => onDeleteClick({ pictureType: 'coverPicture' })}>Remove</li>
+                                            </ul>
                                         )
                                     }
 
                                 </div>
                             }
                             <div className="profileUserImg">
-                                <img
+                                <div className="userImg">
 
-                                    src={file1 ? URL.createObjectURL(file1) : (user?.profilePicture?.url || "/assets/noAvatar.png")}
-                                    alt="_img"
-                                />
-                                {
-                                    currentUser.username === username && <div className="addImageButton" onClick={userHandleClick}>
-                                        <IconButton>
-                                            <AddAPhoto color="success" sx={{ fontSize: 28 }} />
-                                            <input
-                                                name="file1"
-                                                type="file"
-                                                id="file1"
-                                                accept=".png, .jpeg, .jpg"
-                                                onChange={(e) => setFile1(e.target.files[0])}
-                                                className="coverButtonInput"
-                                            />
-                                        </IconButton>
-                                        {
-                                            userBtnOpen && (
-                                                <div>
-                                                    <ul className="optionsButtonContainer">
-                                                        <li onClick={handlePictureUpload}>{!file1 ? "Upload" : "Save"}
-                                                        </li>
-                                                        <hr />
-                                                        <li onClick={() => onDeleteClick({ pictureType: 'profilePicture' })}>Remove</li>
-                                                    </ul>
-                                                </div>
-                                            )
-                                        }
 
-                                    </div>
-                                }
+                                    <img
+
+                                        src={file1 ? URL.createObjectURL(file1) : (user?.profilePicture?.url || "/assets/noAvatar.png")}
+                                        alt="_img"
+                                    />
+                                    {
+                                        currentUser.username === username && <div className="addImageButton" onClick={userHandleClick}>
+                                            <IconButton>
+                                                <AddAPhoto color="success" sx={{ fontSize: 28 }} />
+                                                <input
+                                                    name="file1"
+                                                    type="file"
+                                                    id="file1"
+                                                    accept=".png, .jpeg, .jpg"
+                                                    onChange={(e) => setFile1(e.target.files[0])}
+                                                    className="coverButtonInput"
+                                                />
+                                            </IconButton>
+
+                                            {
+                                                userBtnOpen && (
+                                                    <div>
+                                                        <ul className="optionsButtonContainer">
+                                                            <li onClick={handlePictureUpload}>{!file1 ? "Upload" : "Save"}
+                                                            </li>
+                                                            <hr />
+                                                            <li onClick={() => onDeleteClick({ pictureType: 'profilePicture' })}>Remove</li>
+                                                        </ul>
+                                                    </div>
+                                                )
+                                            }
+
+                                        </div>
+                                    }
+                                </div>
                                 <div className="profileInfo">
                                     <h4 className="profileInfoName">{user.name}</h4>
                                     <span className="profileInfoDesc">{user.desc}</span>
