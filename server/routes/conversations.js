@@ -54,5 +54,18 @@ router.get('/find/:firstUserId/:secondUserId', async (req, res) => {
     }
 })
 
+// delete a conversation
+router.delete("/delete/:conversationId", async (req, res) => {
+    const conversation = await Conversation.findById(req.params.conversationId)
+    !conversation && res.status(404).json("Conversation not Found!")
+
+    try {
+        await conversation.deleteOne()
+        res.status(200).json("Conversation deleted Successfully")
+    } catch (err) {
+        res.status(500).json(err)
+    }
+})
+
 
 module.exports = router;

@@ -3,7 +3,7 @@ import './userFriends.css';
 import axios from 'axios';
 import moment from 'moment';
 
-const UserFriends = ({ onlineUsers, userFriends, currentUserId, setCurrentChat, addConversation, setChatFriend }) => {
+const UserFriends = ({ onlineUsers, userFriends, currentUserId, setCurrentChat, addConversation, setChatFriend, setIsOpen }) => {
 
     const [allConversations, setAllConversations] = useState([]);
     const [lastMessages, setLastMessages] = useState([]);
@@ -46,7 +46,8 @@ const UserFriends = ({ onlineUsers, userFriends, currentUserId, setCurrentChat, 
             senderId: currentUserId
         };
         addConversation(conversationData);
-        setChatFriend(userFriend)
+        setChatFriend(userFriend);
+        setIsOpen(prev => !prev);
         try {
             const res = await axios.get(`/conversations/find/${currentUserId}/${userFriend._id}`)
             setCurrentChat(res.data)
@@ -77,7 +78,7 @@ const UserFriends = ({ onlineUsers, userFriends, currentUserId, setCurrentChat, 
                             <div className='nameMsg'>
                                 <span className="userFriendsName">{userFriend.name}</span>
                                 <p className='newMsg'>
-                                    {lastMessage?.text.substring(0, 33)}<strong> ...</strong>
+                                    {(lastMessage ? lastMessage.text : "Start a chat").substring(0, 33)}<strong> ...</strong>
                                 </p>
                             </div>
                             <span className='msgTime'>

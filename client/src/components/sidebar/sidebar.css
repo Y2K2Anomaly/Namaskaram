@@ -70,7 +70,7 @@
     text-align: left;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 975px) {
     .sidebar {
         display: none;
     }
