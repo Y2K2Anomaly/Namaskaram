@@ -154,7 +154,6 @@ const Messenger = React.memo(() => {
       const filteredConversations = conversations.filter(conversation => conversation._id !== deletedConversation._id)
       setConversations(filteredConversations)
       window.location.reload();
-      console.log(conversations)
     } catch (err) {
       console.error(err)
     }

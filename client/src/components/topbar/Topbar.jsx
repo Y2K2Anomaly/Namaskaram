@@ -45,7 +45,7 @@ const Topbar = () => {
             </div>
             <div className="topbarRight">
                 <div className="topbarIcons">
-                    <div className="topbarIconItem">
+                    <div className="topbarIconItem hide">
                         <IconButton>
                             <Person sx={{ fontSize: 22, color: 'white' }} />
                         </IconButton>

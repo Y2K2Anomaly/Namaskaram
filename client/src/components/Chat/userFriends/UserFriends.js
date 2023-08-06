@@ -82,7 +82,7 @@ const UserFriends = ({ onlineUsers, userFriends, currentUserId, setCurrentChat, 
                                 </p>
                             </div>
                             <span className='msgTime'>
-                                {moment(lastMessage?.createdAt).fromNow()}
+                                {lastMessage && moment(lastMessage?.createdAt).fromNow()}
                             </span>
                         </div>)
                 })
