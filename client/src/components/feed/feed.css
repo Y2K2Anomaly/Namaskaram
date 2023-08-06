@@ -11,3 +11,9 @@
     padding: 2px 0;
     margin: 10px 0;
 }
+
+@media (max-width: 975px) {
+    .hideFeed {
+        display: none;
+    }
+}

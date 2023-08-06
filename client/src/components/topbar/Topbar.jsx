@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 
-const Topbar = () => {
+const Topbar = ({ setShowSidebar }) => {
     const { user: currentUser } = useContext(AuthContext);
     const [sameUser, setSameUser] = useState({});
     const navigate = useNavigate();
@@ -27,7 +27,10 @@ const Topbar = () => {
 
     return (
         <div className='topbarContainer'>
-            <div className="topbarLeft">
+            <div
+                className="topbarLeft"
+                onClick={() => setShowSidebar ? setShowSidebar(prev => !prev) : 0}
+            >
                 <Link to={"/" + currentUser.username + "/timeline"} style={{ textDecoration: "none" }}>
                     <span className="logo">Namaskaram</span>
                     <img src='/assets/namaste_icon.png' alt='#logo' className='namasteIcon' />
@@ -45,11 +48,11 @@ const Topbar = () => {
             </div>
             <div className="topbarRight">
                 <div className="topbarIcons">
-                    <div className="topbarIconItem">
+                    <div className="topbarIconItem hide">
                         <IconButton>
                             <Person sx={{ fontSize: 22, color: 'white' }} />
                         </IconButton>
-                        <span className="topbarIconBadge">1</span>
+                        <span className="topbarIconBadge">0</span>
                     </div>
                     <div
                         className="topbarIconItem"
@@ -58,13 +61,13 @@ const Topbar = () => {
                         <IconButton>
                             <Chat sx={{ fontSize: 22, color: 'white' }} />
                         </IconButton>
-                        <span className="topbarIconBadge">2</span>
+                        <span className="topbarIconBadge">0</span>
                     </div>
                     <div className="topbarIconItem">
                         <IconButton>
                             <Notifications sx={{ fontSize: 22, color: 'white' }} />
                         </IconButton>
-                        <span className="topbarIconBadge">1</span>
+                        <span className="topbarIconBadge">0</span>
                     </div>
                 </div>
                 <div className='logOutButton' onClick={logOut}>

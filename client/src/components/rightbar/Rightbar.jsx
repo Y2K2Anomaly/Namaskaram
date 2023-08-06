@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import "./rightbar.css";
 import Online from "../online/Online";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from '../../context/AuthContext';
 import { Add, Remove } from "@mui/icons-material";
 import { io } from 'socket.io-client';
@@ -113,8 +113,12 @@ const Rightbar = React.memo(() => {
 
     const DOBformatted = `${day} ${month} ${year}`;
 
+
+    const location = useLocation().pathname;
+
     return (
-        <div className='rightbar'>
+        <div
+            className={location === `/${currentUser.username}/timeline` ? "rightbar hide" : "rightbar"}>
             <div className="rightbarWrapper">
                 {user.username !== currentUser.username && (
                     <button

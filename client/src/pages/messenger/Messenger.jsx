@@ -2,11 +2,10 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import './messenger.css';
 import Topbar from "../../components/topbar/Topbar";
 import Message from '../../components/Chat/message/Message';
-import ChatOnline from '../../components/Chat/chatOnline/ChatOnline';
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 import { io } from 'socket.io-client';
-import { ArrowBackIos, MoreVert, Send } from '@mui/icons-material';
+import { ArrowBackIos, Delete, KeyboardReturn, MoreVert, Send } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import UserFriends from '../../components/Chat/userFriends/UserFriends';
 import { useNavigate } from 'react-router-dom';
@@ -26,6 +25,8 @@ const Messenger = React.memo(() => {
   const scrollRef = useRef();
   const socket = useRef();
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+  const [convOption, setConvOption] = useState(false);
 
   useEffect(() => {
     const getFriends = async () => {
@@ -134,10 +135,27 @@ const Messenger = React.memo(() => {
   }, [messages])
 
   const onDeleteHandler = async ({ messageId }) => {
-    const res = await axios.delete(`/messages/${messageId}`);
-    const deletedMessage = res.data;
-    const filteredMessages = messages.filter(message => message._id !== deletedMessage._id)
-    setMessages(filteredMessages)
+    try {
+
+      const res = await axios.delete(`/messages/${messageId}`);
+      const deletedMessage = res.data;
+      const filteredMessages = messages.filter(message => message._id !== deletedMessage._id)
+      setMessages(filteredMessages)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  const onDeleteConversation = async () => {
+    try {
+      const res = await axios.delete(`/conversations/delete/${currentChat._id}`)
+      const deletedConversation = res.data;
+      const filteredConversations = conversations.filter(conversation => conversation._id !== deletedConversation._id)
+      setConversations(filteredConversations)
+      window.location.reload();
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   return (
@@ -145,7 +163,7 @@ const Messenger = React.memo(() => {
       <div className='messengerComponent'>
         <Topbar />
         <div className="messenger">
-          <div className="chatMenu">
+          <div className={!isOpen ? "chatMenu" : "chatMenu chatMenuVisible"}>
             <div className="chatMenuWrapper">
               <div className='chatMenuHeading'>
                 <h5 className='chatMenuHeading'>Chats</h5>
@@ -153,25 +171,8 @@ const Messenger = React.memo(() => {
               <input placeholder='Search for friends' className='chatMenuInput' />
 
               <hr />
-              <div className="chatOnline">
-                <div className="chatWrapper">
-                  <h5 className='chatHeading'>Online Friends: {onlineUsers.length}</h5>
-                  {
-                    onlineUsers.length ? (
-                      <ChatOnline
-                        onlineUsers={onlineUsers}
-                        currentUserId={user._id}
-                        userFriends={currentUserFriends}
-                        setCurrentChat={setCurrentChat}
-                        addConversation={addConversation}
-                        setChatFriend={setChatFriend}
-                      />
-                    ) : <h6>No Online Friends</h6>
-                  }
-                </div>
-              </div>
-              <hr />
-              <div className="chatOnline">
+
+              <div className="chat">
                 <div className="chatWrapper">
                   <h5 className='chatHeading'>All Friends: {currentUserFriends.length}</h5>
                   {
@@ -183,6 +184,7 @@ const Messenger = React.memo(() => {
                         setCurrentChat={setCurrentChat}
                         addConversation={addConversation}
                         setChatFriend={setChatFriend}
+                        setIsOpen={setIsOpen}
                       />
                     ) : <h6>No User Friends</h6>
                   }
@@ -195,18 +197,18 @@ const Messenger = React.memo(() => {
             <hr />
           </div>
 
-          <div className="chatBox">
+          <div className={!isOpen ? "chatBox" : "chatBox chatBoxVisible"}>
             <div className="chatBoxWrapper">
               {
                 currentChat ? (
                   <>
                     <div className="chatBoxTop">
                       <div className="chatBoxHeader">
-                        <div className="chatBoxHeaderLeft" onClick={() => navigate('/profile/' + chatFriend.username)}>
-                          <IconButton>
+                        <div className="chatBoxHeaderLeft">
+                          <IconButton onClick={() => setIsOpen(prev => !prev)}>
                             <ArrowBackIos className='backIcon' sx={{ fontSize: "25px" }} />
                           </IconButton>
-                          <div className="chatBoxHeaderImg">
+                          <div className="chatBoxHeaderImg" onClick={() => navigate('/profile/' + chatFriend.username)}>
                             <img src={chatFriend?.profilePicture.url || "/assets/noAvatar.png"} alt="" />
                             <div className='rippleBadge'>
                               {
@@ -233,7 +235,7 @@ const Messenger = React.memo(() => {
                             </div>
                           </div>
                           <div className="nameOnlineContainer">
-                            <h4>{chatFriend?.name}</h4>
+                            <h4 onClick={() => navigate('/profile/' + chatFriend.username)}>{chatFriend?.name}</h4>
                             <span className='onlineSpan'>
                               {onlineUsers.includes(chatFriend._id) ?
                                 "Online" : "Offline"
@@ -242,9 +244,16 @@ const Messenger = React.memo(() => {
                           </div>
                         </div>
                         <div className="chatBoxHeaderRight">
-                          <IconButton>
-                            <MoreVert sx={{ fontSize: "25px" }} />
+                          <IconButton onClick={() => setConvOption(!convOption)}>
+                            {!convOption ? <MoreVert sx={{ fontSize: "25px" }} /> : <KeyboardReturn sx={{ fontSize: "25px" }} />}
                           </IconButton>
+                          {
+                            convOption && (
+                              <IconButton className="deleteButton" onClick={onDeleteConversation}>
+                                <Delete sx={{ fontSize: "30px", color: "red" }} />
+                              </IconButton>
+                            )
+                          }
                         </div>
                       </div>
                     </ div>
@@ -279,7 +288,7 @@ const Messenger = React.memo(() => {
             </div>
           </div>
         </div >
-      </div>
+      </div >
     </>
   )
 })

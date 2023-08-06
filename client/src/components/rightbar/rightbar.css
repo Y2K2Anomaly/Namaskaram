@@ -92,8 +92,8 @@
     outline: none;
 }
 
-@media (max-width: 975px) {
-    .rightbar {
+@media (max-width: 675px) {
+    .hide {
         display: none;
     }
 }
