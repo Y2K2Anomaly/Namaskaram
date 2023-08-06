@@ -152,6 +152,7 @@ const Register = () => {
                             ref={from}
                             required
                         />
+                        <strong>DOB:</strong>
                         <input
                             type="date"
                             className="registerInput"

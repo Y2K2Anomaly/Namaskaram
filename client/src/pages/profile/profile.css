@@ -30,6 +30,33 @@
     left: 96%;
 }
 
+.coverOptionButton {
+    position: absolute;
+    top: 92%;
+    left: -120%;
+    width: 100px;
+    height: 80px;
+    padding: 0 0 10px 0;
+    background-color: #fff;
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+    box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
+    position: absolute;
+    text-align: left;
+    z-index: 999;
+}
+
+.coverOptionButton li {
+    padding: 10px 7px;
+    list-style: none;
+    cursor: pointer;
+    transition: all 0.5s ease-out;
+}
+
+.coverOptionButton li:hover {
+    background-color: #f0f0f0;
+}
+
 .coverButtonInput {
     position: absolute;
     top: 25%;
@@ -42,6 +69,7 @@
 .profileUserImg {
     display: flex;
     justify-content: center;
+    align-items: center;
     flex-direction: column;
     position: absolute;
     top: 35%;
@@ -57,10 +85,14 @@
     border: 3px solid white;
 }
 
+.userImg {
+    position: relative;
+}
+
 .addImageButton {
     position: absolute;
-    top: 46%;
-    left: 70%;
+    top: 65%;
+    left: 71%;
 }
 
 .userButtonInput {
@@ -107,7 +139,7 @@
     }
 
     .profileUserImg {
-        left: 30%;
+        left: 33%;
     }
 
     .addCoverButton {
