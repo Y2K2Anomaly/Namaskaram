@@ -43,7 +43,7 @@ const Topbar = ({ setShowSidebar }) => {
                     <input
                         type="text"
                         className="searchInput"
-                        placeholder='Search for friend, post or video'
+                        placeholder='Search for friend or post'
                     />
                 </div>
             </div>
