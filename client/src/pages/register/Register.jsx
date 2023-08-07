@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import "./register.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { IconButton } from "@mui/material";
 import { AddAPhoto } from "@mui/icons-material";
+import { loginCall } from '../../apiCalls';
+import { AuthContext } from '../../context/AuthContext';
 
 const Register = () => {
 
@@ -18,6 +20,17 @@ const Register = () => {
     const bio = useRef();
     const relationship = useRef();
     const navigate = useNavigate();
+
+
+    // Login as a test_user
+    const { dispatch } = useContext(AuthContext);
+
+    const getTestUser = (async () => {
+        loginCall(
+            { email: "testuser@gmail.com", password: "123456" },
+            dispatch
+        );
+    })
 
     const [file, setFile] = useState(null);
     const [profilePicture, setProfilePicture] = useState('');
@@ -96,9 +109,10 @@ const Register = () => {
                 <div className="registerRight">
                     <form className="registerBox" onSubmit={handleClick}>
                         <h1>Register Account</h1>
+                        <Link onClick={() => getTestUser()} className='testUserLogin'>Login as a test user!</Link>
                         <div className='userImage'>
                             <img src={file ? URL.createObjectURL(file) : "assets/noAvatar.png"} alt="" />
-                            <div className="addImageButton">
+                            <div className="addRegisterImageButton">
                                 <IconButton>
                                     <AddAPhoto color="primary" sx={{ fontSize: 28 }} />
                                     <input
@@ -163,7 +177,7 @@ const Register = () => {
                         <input
                             type="text"
                             className="registerInput"
-                            placeholder="Relationship"
+                            placeholder="Relationship eg. 1 - 2 - 3"
                             ref={relationship}
                             required
                         />

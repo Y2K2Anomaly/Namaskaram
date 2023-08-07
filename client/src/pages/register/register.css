@@ -62,6 +62,7 @@
     position: relative;
     width: 100px;
     height: 100px;
+    padding: 10px;
 }
 
 .userImage img {
@@ -71,19 +72,31 @@
     object-fit: cover;
 }
 
-.addImageButton {
+.addRegisterImageButton {
     position: absolute;
-    top: 90%;
-    left: 80%;
+    top: 54%;
+    left: 64%;
 }
 
-.addImageButton input {
+.addRegisterImageButton input {
     position: absolute;
     top: 25%;
     left: -210%;
     opacity: 0;
     z-index: 999;
     cursor: pointer;
+}
+
+.testUserLogin {
+    color: #1775ee;
+}
+
+.testUserLogin:hover {
+    color: #064ba7;
+}
+
+.testUserLogin:active {
+    color: red;
 }
 
 .registerInput {

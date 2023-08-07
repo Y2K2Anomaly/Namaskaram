@@ -84,11 +84,11 @@ export default function Profile() {
     const onDeleteClick = async ({ pictureType }) => {
         try {
             if (pictureType === 'profilePicture') {
-                await axios.delete(`/upload/${user.profilePicture.public_id}`);
+                user.profilePicture.url && await axios.delete(`/upload/${user.profilePicture.public_id}`);
                 const res = await axios.put(`/users/picture/${currentUser.username}`, user);
                 console.log(res.data);
             } else if (pictureType === 'coverPicture') {
-                await axios.delete(`/upload/${user.coverPicture.public_id}`);
+                user.coverPicture.url && await axios.delete(`/upload/${user.coverPicture.public_id}`);
                 const res = await axios.put(`/users/cover/picture/${currentUser.username}`, user);
                 console.log(res.data);
             }

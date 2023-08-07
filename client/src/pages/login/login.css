@@ -59,6 +59,18 @@
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
+.testUserLogin {
+    color: #1775ee;
+}
+
+.testUserLogin:hover {
+    color: #064ba7;
+}
+
+.testUserLogin:active {
+    color: red;
+}
+
 .loginInput {
     height: 50px;
     border-radius: 10px;
@@ -87,11 +99,6 @@
 
 .loginButton:disabled {
     cursor: not-allowed;
-}
-
-.loginForgot {
-    text-align: center;
-    color: #116de7;
 }
 
 .loginRegisterButton {
