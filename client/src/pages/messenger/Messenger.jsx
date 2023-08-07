@@ -38,7 +38,7 @@ const Messenger = React.memo(() => {
   }, [user])
 
   useEffect(() => {
-    socket.current = io("ws://localhost:8000");
+    socket.current = io("wss://namaskaram-api.vercel.app");
     socket.current.on("getMessage", data => {
       setArrivalMessage({
         sender: data.senderId,
