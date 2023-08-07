@@ -10,6 +10,7 @@ const Topbar = ({ setShowSidebar }) => {
     const { user: currentUser } = useContext(AuthContext);
     const [sameUser, setSameUser] = useState({});
     const navigate = useNavigate();
+    const notificationCount = false;
 
     const logOut = async () => {
         localStorage.removeItem('user');
@@ -42,7 +43,7 @@ const Topbar = ({ setShowSidebar }) => {
                     <input
                         type="text"
                         className="searchInput"
-                        placeholder='Search for friend, post or video'
+                        placeholder='Search for friend or post'
                     />
                 </div>
             </div>
@@ -52,7 +53,7 @@ const Topbar = ({ setShowSidebar }) => {
                         <IconButton>
                             <Person sx={{ fontSize: 22, color: 'white' }} />
                         </IconButton>
-                        <span className="topbarIconBadge">0</span>
+                        {notificationCount && <span className="topbarIconBadge">0</span>}
                     </div>
                     <div
                         className="topbarIconItem"
@@ -61,13 +62,13 @@ const Topbar = ({ setShowSidebar }) => {
                         <IconButton>
                             <Chat sx={{ fontSize: 22, color: 'white' }} />
                         </IconButton>
-                        <span className="topbarIconBadge">0</span>
+                        {notificationCount && <span className="topbarIconBadge">0</span>}
                     </div>
                     <div className="topbarIconItem">
                         <IconButton>
                             <Notifications sx={{ fontSize: 22, color: 'white' }} />
                         </IconButton>
-                        <span className="topbarIconBadge">0</span>
+                        {notificationCount && <span className="topbarIconBadge">0</span>}
                     </div>
                 </div>
                 <div className='logOutButton' onClick={logOut}>

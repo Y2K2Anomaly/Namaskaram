@@ -17,10 +17,16 @@
 
 .d-block {
     display: block;
+    position: absolute;
 }
 
 .d-none {
     display: none;
+}
+
+.emojiPicker {
+    display: flex;
+    align-items: center;
 }
 
 .shareProfileImg {
@@ -35,6 +41,7 @@
     border: none;
     outline: none;
     width: 80%;
+    font-size: 1.6rem;
 }
 
 .shareHr {

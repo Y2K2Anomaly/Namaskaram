@@ -124,7 +124,7 @@ const Post = ({ post, onDelete, onEdit }) => {
                             alt="_img"
                             onClick={() => navigate(`/profile/${user.username}`)}
                         />
-                        <span className="postUsername">{user.name}</span>
+                        <span className="postUsername" onClick={() => navigate(`/profile/${user.username}`)}>{user.name}</span>
                         <span className="postDate">
                             <ReactTimeAgo date={Date.parse(post.createdAt)} locale='en-US' />
                         </span>

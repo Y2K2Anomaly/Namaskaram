@@ -64,70 +64,72 @@ const Share = ({ onPostShare }) => {
 
 
     return (
-        <div className='share'>
-            <div className="shareWrapper">
-                <div className="shareTop">
-                    <img className='shareProfileImg' src={sameUser?.username === currentUser.username ? (sameUser?.profilePicture?.url || "/assets/noAvatar.png") : "/assets/noAvatar.png"} alt="" />
-                    <input
-                        type="text"
-                        className="shareInput"
-                        placeholder={`What's in your mind ${currentUser.name} ?`}
-                        value={desc}
-                        onChange={(e) => setDesc(e.target.value)}
-                    />
-                </div>
-
-                <hr className="shareHr" />
-
-                {file && (
-                    <div className="shareImgContainer">
-                        <img className="shareImg" src={URL.createObjectURL(file)} alt="" />
-                        <Cancel className="shareCancelImg" onClick={() => setFile(null)} />
+        <>
+            <div className='share'>
+                <div className="shareWrapper">
+                    <div className="shareTop">
+                        <img className='shareProfileImg' src={sameUser?.username === currentUser.username ? (sameUser?.profilePicture?.url || "/assets/noAvatar.png") : "/assets/noAvatar.png"} alt="" />
+                        <input
+                            type="text"
+                            className="shareInput"
+                            placeholder={`What's in your mind ${currentUser.name} ?`}
+                            value={desc}
+                            onChange={(e) => setDesc(e.target.value)}
+                        />
                     </div>
-                )}
-                <form
-                    className="shareBottom"
-                    onSubmit={submitHandler}
-                    encType="multipart/form-data"
-                >
-                    <div className="shareOptions">
-                        <label htmlFor='file' className="shareOption">
-                            <PermMedia
-                                htmlColor='tomato'
-                                className="shareIcon" />
-                            <span className='shareOptionText'>Photo</span>
-                            <input
-                                style={{ display: "none" }}
-                                name="file"
-                                type="file"
-                                id="file"
-                                accept=".png, .jpeg, .jpg"
-                                onChange={(e) => setFile(e.target.files[0])} />
-                        </label>
-                        <div className="shareOption">
-                            <div className="emojiPicker" onClick={() => setPickerVisible(!isPickerVisible)}>
-                                <EmojiEmotions
-                                    htmlColor='goldenrod'
+
+                    <hr className="shareHr" />
+
+                    {file && (
+                        <div className="shareImgContainer">
+                            <img className="shareImg" src={URL.createObjectURL(file)} alt="" />
+                            <Cancel className="shareCancelImg" onClick={() => setFile(null)} />
+                        </div>
+                    )}
+                    <form
+                        className="shareBottom"
+                        onSubmit={submitHandler}
+                        encType="multipart/form-data"
+                    >
+                        <div className="shareOptions">
+                            <label htmlFor='file' className="shareOption">
+                                <PermMedia
+                                    htmlColor='tomato'
                                     className="shareIcon" />
-                                <span className='shareOptionText'>Feelings</span>
+                                <span className='shareOptionText'>Photo</span>
+                                <input
+                                    style={{ display: "none" }}
+                                    name="file"
+                                    type="file"
+                                    id="file"
+                                    accept=".png, .jpeg, .jpg"
+                                    onChange={(e) => setFile(e.target.files[0])} />
+                            </label>
+                            <div className="shareOption">
+                                <div className="emojiPicker" onClick={() => setPickerVisible(!isPickerVisible)}>
+                                    <EmojiEmotions
+                                        htmlColor='goldenrod'
+                                        className="shareIcon" />
+                                    <span className='shareOptionText'>Feelings</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <button className="shareButton" type="submit">Share</button>
-                </form>
-                <div className={isPickerVisible ? 'd-block' : 'd-none'}>
-                    <Picker
-                        data={data}
-                        preview="none"
-                        onEmojiSelect={(e) => {
-                            setDesc(e?.native)
-                            setPickerVisible(!isPickerVisible)
-                        }}
-                        theme="light"
-                    />
+                        <button className="shareButton" type="submit">Share</button>
+                    </form>
                 </div>
             </div>
-        </div>
+            <div className={isPickerVisible ? 'd-block' : 'd-none'}>
+                <Picker
+                    data={data}
+                    preview="none"
+                    onEmojiSelect={(e) => {
+                        setDesc(e?.native)
+                        setPickerVisible(!isPickerVisible)
+                    }}
+                    theme="light"
+                />
+            </div>
+        </>
     )
 }
 
