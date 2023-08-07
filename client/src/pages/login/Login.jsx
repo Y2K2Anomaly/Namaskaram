@@ -3,13 +3,21 @@ import "./login.css";
 import { loginCall } from "../../apiCalls";
 import { AuthContext } from "../../context/AuthContext";
 import { CircularProgress } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const email = useRef();
   const password = useRef();
   const { isFetching, dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // Login as a test user
+  const getTestUser = (async () => {
+    loginCall(
+      { email: "testuser@gmail.com", password: "123456" },
+      dispatch
+    );
+  })
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -37,6 +45,7 @@ export default function Login() {
         <div className="loginRight">
           <form className="loginBox" onSubmit={handleClick}>
             <h1>Already Registered?</h1>
+            <Link onClick={() => getTestUser()} className="testUserLogin">Login as a test user!</Link>
             <input
               placeholder="Email"
               type="email"
@@ -59,7 +68,6 @@ export default function Login() {
                 "Log In"
               )}
             </button>
-            <span className="loginForgot">Forgot Password?</span>
             <button className="loginRegisterButton" onClick={() => navigate('/register')}>
               Create a New Account
             </button>

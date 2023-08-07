@@ -152,7 +152,7 @@ const Rightbar = React.memo(() => {
                     )}
                     <div className="rightbarInfoItem">
                         <span className="rightbarInfoKey">Relationship: </span>
-                        <span className="rightbarInfoValue">{user.relationship === 1 ? "Single" : user.relationship === 2 ? "Married" : "-"}</span>
+                        <span className="rightbarInfoValue">{user.relationship === 1 ? "Single" : user.relationship === 2 ? "Committed" : "Polyamory"}</span>
                     </div>
                 </div>
                 <h4 className='rightbarTitle'>User friends: {userFriends.length}</h4>

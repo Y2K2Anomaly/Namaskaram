@@ -4,11 +4,15 @@ import { PermMedia, Cancel, EmojiEmotions } from "@mui/icons-material";
 import { AuthContext } from '../../context/AuthContext';
 import axios from 'axios';
 
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
+
 const Share = ({ onPostShare }) => {
 
     const { user: currentUser } = useContext(AuthContext);
     const [sameUser, setSameUser] = useState('');
     const [desc, setDesc] = useState('');
+    const [isPickerVisible, setPickerVisible] = useState(false);
 
     const [file, setFile] = useState(null);
 
@@ -101,14 +105,27 @@ const Share = ({ onPostShare }) => {
                                 onChange={(e) => setFile(e.target.files[0])} />
                         </label>
                         <div className="shareOption">
-                            <EmojiEmotions
-                                htmlColor='goldenrod'
-                                className="shareIcon" />
-                            <span className='shareOptionText'>Feelings</span>
+                            <div className="emojiPicker" onClick={() => setPickerVisible(!isPickerVisible)}>
+                                <EmojiEmotions
+                                    htmlColor='goldenrod'
+                                    className="shareIcon" />
+                                <span className='shareOptionText'>Feelings</span>
+                            </div>
                         </div>
                     </div>
                     <button className="shareButton" type="submit">Share</button>
                 </form>
+                <div className={isPickerVisible ? 'd-block' : 'd-none'}>
+                    <Picker
+                        data={data}
+                        preview="none"
+                        onEmojiSelect={(e) => {
+                            setDesc(e?.native)
+                            setPickerVisible(!isPickerVisible)
+                        }}
+                        theme="light"
+                    />
+                </div>
             </div>
         </div>
     )

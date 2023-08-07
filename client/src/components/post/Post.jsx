@@ -69,8 +69,7 @@ const Post = ({ post, onDelete, onEdit }) => {
 
     const onDeleteClick = async () => {
         try {
-            await axios.delete(`/upload/${post.img.public_id}`);
-
+            post.img.url && await axios.delete(`/upload/${post.img.public_id}`);
             await axios.delete(`/posts/${post._id}`, {
                 data: { userId: currentUser._id },
             });
