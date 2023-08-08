@@ -35,12 +35,12 @@ app.use(morgan("common"));
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 app.use(cors({
-    origin: "http://localhost:3000"
+    origin: "https://namaskaram-client.vercel.app"
 }));
 
 // middlewares to enable CORS for all routes
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Origin', 'https://namaskaram-client.vercel.app');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
@@ -123,8 +123,8 @@ const server = app.listen(PORT, () => {
 // Socket
 const io = require("socket.io")(server, {
     cors: {
-        origin: "http://localhost:3000",
-        // origin: "https://namaskaram-client.vercel.app",
+        // origin: "http://localhost:3000",
+        origin: "https://namaskaram-client.vercel.app",
     },
 });
 
