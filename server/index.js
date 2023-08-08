@@ -123,8 +123,8 @@ const server = app.listen(PORT, () => {
 // Socket
 const io = require("socket.io")(server, {
     cors: {
-        origin: "http://localhost:3000",
-        // origin: "https://namaskaram-client.vercel.app",
+        // origin: "http://localhost:3000",
+        origin: "https://namaskaram-client.vercel.app",
     },
 });
 
