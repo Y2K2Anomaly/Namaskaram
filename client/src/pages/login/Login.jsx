@@ -39,7 +39,7 @@ export default function Login() {
           </div>
 
           <span className="loginDesc">
-            Connect with friends and the world around you on Lamasocial.
+            Connect with friends and the world around you on Namaskaram.
           </span>
         </div>
         <div className="loginRight">
