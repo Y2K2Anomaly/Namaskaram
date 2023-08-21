@@ -13,7 +13,8 @@ Live = https://namaskaram-client.vercel.app/
 -  create a post edit a post description and delete a post.
 -  like a post unlike a post
 -  comment on post and delete your comment
--  real time chat section start a chat, delete particular message or whole conversation with a user. 
+-  real time chat section start a chat, delete particular message or whole conversation with a user.
+-  all the features are working in this app except search inputs and notifications.
 
 # Tools and technologies used 
 MERN, pure css, multer, cloudinary, JWT, Bcrypt, Socket.io, @materialUI icons and badge component for ripple online badge effect, vercel and render.
