@@ -1,6 +1,8 @@
 # Namaskaram
 MERN Social Media App with Chatting feature...
 
+Live = https://namaskaram-client.vercel.app/
+
 #Features 
 - create a account with profile pic, details etc.
 - All the users who are present on this app are gonna visible in sidebar Friend Suggestions except you and the people you follow.
