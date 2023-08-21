@@ -89,6 +89,7 @@
 
 .testUserLogin {
     color: #1775ee;
+    margin: 2px 0;
 }
 
 .testUserLogin:hover {
@@ -162,10 +163,14 @@
 
 @media (max-width: 765px) {
 
+    .register {
+        padding-left: 0;
+    }
+
     .registerWrapper {
         flex-direction: column;
         text-align: left;
-        width: 70%;
+        width: 80%;
     }
 
     .namaskaramTitle {
@@ -173,7 +178,39 @@
         justify-content: center;
     }
 
+    .registerBox h1 {
+        font-size: 28px;
+    }
+
     .registerDesc {
-        display: none;
+        text-align: center;
+        font-size: 22px;
+    }
+
+    .registerLeft {
+        padding-bottom: 10px;
+    }
+}
+
+@media (max-width: 400px) {
+    .loginLogo {
+        font-size: 45px;
+    }
+
+    .registerBox h1 {
+        font-size: 25px;
+    }
+
+    .registerDesc {
+        font-size: 20px;
+    }
+
+    .loginNamasteIcon {
+        width: 80px;
+        height: 70px;
+    }
+
+    .registerLoginButton {
+        height: 60px;
     }
 }
