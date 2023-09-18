@@ -180,13 +180,16 @@ const Register = () => {
                                 ref={dateOfBirth}
                                 required
                             />
-                            <input
-                                type="text"
+                            <select
                                 className="registerInput"
-                                placeholder="Relationship eg. 1 - 2 - 3"
                                 ref={relationship}
                                 required
-                            />
+                            >
+                                <option value="">Relationship Status</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3 or more</option>
+                            </select>
                             <input
                                 type="email"
                                 className="registerInput"

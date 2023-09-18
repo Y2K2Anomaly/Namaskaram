@@ -78,7 +78,10 @@
     border: 1px solid gray;
     font-size: 18px;
     padding-left: 20px;
-    outline: none;
+}
+
+.loginInput:focus {
+    outline: 1px solid #1775ee;
 }
 
 .loginButton {
