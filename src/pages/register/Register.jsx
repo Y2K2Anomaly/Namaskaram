@@ -81,7 +81,7 @@ const Register = () => {
                 desc: bio.current.value,
                 city: city.current.value,
                 from: from.current.value,
-                relationship: relationship.current.value,
+                relationship: relationship,
                 email: email.current.value,
                 dateOfBirth: dateOfBirth.current.value,
                 password: password.current.value,
