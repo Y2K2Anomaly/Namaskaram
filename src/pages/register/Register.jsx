@@ -37,11 +37,16 @@ const Register = () => {
 
     const [isValid, setIsValid] = useState(true)
 
+    useEffect(() => {
+        const regexPattern = /^@[a-z0-9]+(_[a-z0-9]+)*$/;
+        setIsValid(regexPattern.test(username) && !/\s/.test(username));
+        if (username === "") {
+            setIsValid(true)
+        }
+    }, [username])
+
     const handleUsernameChange = (e) => {
         const value = e.target.value;
-        const regexPattern = /^@[a-z0-9]+(_[a-z0-9]+)*$/;
-        setIsValid(regexPattern.test(value) && !/\s/.test(value));
-
         setUsername(value);
     };
 
