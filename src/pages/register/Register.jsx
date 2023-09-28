@@ -9,7 +9,7 @@ import { AuthContext } from '../../context/AuthContext';
 
 const Register = () => {
 
-    const name = useRef('');
+    const name = useRef();
     const [username, setUsername] = useState('');
     const email = useRef();
     const password = useRef();
@@ -18,7 +18,7 @@ const Register = () => {
     const from = useRef();
     const dateOfBirth = useRef();
     const bio = useRef();
-    const relationship = useRef();
+    const [relationship, setRelationship] = useState('none');
     const navigate = useNavigate();
 
 
@@ -182,10 +182,11 @@ const Register = () => {
                             />
                             <select
                                 className="registerInput"
-                                ref={relationship}
+                                value={relationship}
+                                onChange={(e) => setRelationship(e.target.value)}
                                 required
                             >
-                                <option value="">Relationship Status</option>
+                                <option value="none" disabled>Relationship Status</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3 or more</option>

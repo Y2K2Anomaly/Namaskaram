@@ -112,19 +112,6 @@
     box-shadow: 0 0 2px 0 #1775ee;
 }
 
-.dateInput {
-    height: 50px;
-    border: none;
-    border-radius: 10px;
-    border-bottom: 1px solid gray;
-    font-size: 18px;
-    padding-left: 20px;
-    margin-bottom: 10px;
-    outline: none;
-    box-shadow: 0 0 2px 0 #1775ee;
-    width: 100%;
-}
-
 .registerButton {
     margin-bottom: 10px;
     height: 50px;
