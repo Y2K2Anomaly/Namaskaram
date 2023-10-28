@@ -15,7 +15,7 @@ axios.defaults.baseURL = 'https://namaskaram-api.onrender.com/api';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <AuthContextProvider>
-      <App />
-    </AuthContextProvider>
+  <AuthContextProvider>
+    <App />
+  </AuthContextProvider>
 );
