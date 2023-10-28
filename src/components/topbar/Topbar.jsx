@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './topbar.css';
-import { Search, Person, Chat, Notifications, Logout } from '@mui/icons-material';
+import { Chat, Widgets, Logout } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from '../../context/AuthContext';
@@ -30,31 +30,14 @@ const Topbar = ({ setShowSidebar }) => {
         <div className='topbarContainer'>
             <div
                 className="topbarLeft"
-                onClick={() => setShowSidebar ? setShowSidebar(prev => !prev) : 0}
             >
                 <Link to={"/" + currentUser.username + "/timeline"} style={{ textDecoration: "none" }}>
                     <span className="logo">Namaskaram</span>
                     <img src='/assets/namaste_icon.png' alt='#logo' className='namasteIcon' />
                 </Link>
             </div>
-            <div className="topbarCenter">
-                <div className="searchbar">
-                    <Search className='searchIcon' />
-                    <input
-                        type="text"
-                        className="searchInput"
-                        placeholder='Search for friend or post'
-                    />
-                </div>
-            </div>
             <div className="topbarRight">
                 <div className="topbarIcons">
-                    <div className="topbarIconItem hide">
-                        <IconButton>
-                            <Person sx={{ fontSize: 22, color: 'white' }} />
-                        </IconButton>
-                        {notificationCount && <span className="topbarIconBadge">0</span>}
-                    </div>
                     <div
                         className="topbarIconItem"
                         onClick={() => navigate("/messenger")}
@@ -64,9 +47,12 @@ const Topbar = ({ setShowSidebar }) => {
                         </IconButton>
                         {notificationCount && <span className="topbarIconBadge">0</span>}
                     </div>
-                    <div className="topbarIconItem">
+                    <div
+                        className="topbarIconItem"
+                        onClick={() => setShowSidebar ? setShowSidebar(prev => !prev) : 0}
+                    >
                         <IconButton>
-                            <Notifications sx={{ fontSize: 22, color: 'white' }} />
+                            <Widgets sx={{ fontSize: 22, color: 'white' }} />
                         </IconButton>
                         {notificationCount && <span className="topbarIconBadge">0</span>}
                     </div>

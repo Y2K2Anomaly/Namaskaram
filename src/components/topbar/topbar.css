@@ -10,7 +10,7 @@
 }
 
 .topbarLeft {
-    flex: 3;
+    flex: 5;
     display: flex;
     height: 50px;
     align-items: flex-end;
@@ -34,33 +34,8 @@
     height: 45px;
 }
 
-.topbarCenter {
-    flex: 5;
-}
-
-.searchbar {
-    width: 90%;
-    height: 3rem;
-    background-color: white;
-    border-radius: 3rem;
-    display: flex;
-    align-items: center;
-}
-
-.searchIcon {
-    font-size: 2rem !important;
-    margin-left: 0.5em;
-    margin-right: 0.03em;
-}
-
-.searchInput {
-    border: none;
-    width: 70%;
-    outline: none;
-}
-
 .topbarRight {
-    flex: 3;
+    flex: 2;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -69,6 +44,7 @@
 
 .topbarIcons {
     display: flex;
+    visibility: hidden;
 }
 
 .topbarIconItem {
@@ -147,6 +123,12 @@
 
     .topbarCenter {
         display: none;
+    }
+}
+
+@media (max-width: 975px) {
+    .topbarIcons {
+        visibility: visible;
     }
 }
 

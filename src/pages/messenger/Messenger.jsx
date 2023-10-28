@@ -168,7 +168,7 @@ const Messenger = React.memo(() => {
               <div className='chatMenuHeading'>
                 <h5 className='chatMenuHeading'>Chats</h5>
               </div>
-              <input placeholder='Search for friends' className='chatMenuInput' />
+              {/* <input placeholder='Search for friends' className='chatMenuInput' /> */}
 
               <hr />
 
